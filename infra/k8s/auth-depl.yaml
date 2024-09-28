@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth-depl
+          image: nody00/autobuy-auth
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "1000m"

@@ -1,13 +1,13 @@
 import { app } from "./app";
 
 const start = async () => {
-  console.log("Auth service booting up...");
+  console.log("Auth service V2 booting up...");
   try {
     // connect to mongoose and stuff
   } catch (error) {}
 
   app.listen(3000, () => {
-    console.log("Auth service listening on port 3000...");
+    console.log("Auth service V2 listening on port 3000...");
   });
 };
 
