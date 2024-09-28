@@ -1,7 +1,7 @@
 import express from "express";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-
+import { newUserRouter } from "./routes/newUser";
 const app = express();
 
 app.set("trust proxy", true);
@@ -13,8 +13,10 @@ app.use(
   })
 );
 
+app.use("/event-bus", newUserRouter);
+
 app.all("*", async (req, res) => {
-  throw new Error("Route not found!");
+  res.send({ message: "Route not found" });
 });
 
 export { app };

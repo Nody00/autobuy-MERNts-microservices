@@ -14,11 +14,11 @@ app.use(
   })
 );
 
-app.use(signInRoute);
-app.use(signUpRoute);
+app.use("/auth", signInRoute);
+app.use("/auth", signUpRoute);
 
 app.all("*", async (req, res) => {
-  throw new Error("Route not found!");
+  res.send({ message: "Route not found" });
 });
 
 export { app };

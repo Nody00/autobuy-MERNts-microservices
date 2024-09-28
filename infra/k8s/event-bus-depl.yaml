@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: event-bus-depl
 spec:
   selector:
     matchLabels:
-      app: auth
+      app: event-bus
   template:
     metadata:
       labels:
-        app: auth
+        app: event-bus
     spec:
       containers:
-        - name: auth-depl
-          image: nody00/autobuy-auth
+        - name: event-bus-depl
+          image: nody00/autobuy-event-bus
           resources:
             limits:
               memory: "2048Mi"
@@ -22,12 +22,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-clusterip-srv
+  name: event-bus-srv
 spec:
   selector:
-    app: auth
+    app: event-bus
   ports:
-    - name: auth
+    - name: event-bus
       protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 3002
+      targetPort: 3002
