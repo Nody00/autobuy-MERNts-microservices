@@ -41,8 +41,11 @@ router.post(
     console.log("dinov log newUser", newUser);
 
     const result = await axios.post(
-      "http://event-bus-srv:3002/event-bus/new/user",
-      { newUser }
+      "http://event-bus-srv:5000/event-bus/new/event",
+      {
+        type: "newUser",
+        data: newUser,
+      }
     );
 
     console.log("dinov log result", result.data);

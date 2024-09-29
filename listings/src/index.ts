@@ -6,8 +6,8 @@ const start = async () => {
     // connect to mongoose and stuff
   } catch (error) {}
 
-  app.listen(3000, () => {
-    console.log("Listing listening on port 3000...");
+  app.listen(4002, () => {
+    console.log("Listing listening on port 4002...");
   });
 };
 

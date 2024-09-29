@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: autobuy.dev
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            path: "/?(.*)"
+            backend:
+              service:
+                name: client-clusterip-srv
+                port:
+                  number: 3000
+          - pathType: Prefix
+            path: "/auth/"
+            backend:
+              service:
+                name: auth-clusterip-srv
+                port:
+                  number: 4001
+          - pathType: Prefix
+            path: "/listings/"
+            backend:
+              service:
+                name: listings-clusterip-srv
+                port:
+                  number: 4002

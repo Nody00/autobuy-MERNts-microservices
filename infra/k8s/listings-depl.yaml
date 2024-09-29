@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: event-bus-depl
+  name: listings-depl
 spec:
   selector:
     matchLabels:
-      app: event-bus
+      app: listings
   template:
     metadata:
       labels:
-        app: event-bus
+        app: listings
     spec:
       containers:
-        - name: event-bus-depl
-          image: nody00/autobuy-event-bus
+        - name: listings-depl
+          image: nody00/autobuy-listings
           resources:
             limits:
               memory: "2048Mi"
@@ -22,12 +22,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: event-bus-srv
+  name: listings-clusterip-srv
 spec:
   selector:
-    app: event-bus
+    app: listings
   ports:
-    - name: event-bus
+    - name: listings
       protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: 4002
+      targetPort: 4002

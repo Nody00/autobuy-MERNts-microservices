@@ -29,5 +29,5 @@ spec:
   ports:
     - name: auth
       protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 4001
+      targetPort: 4001
