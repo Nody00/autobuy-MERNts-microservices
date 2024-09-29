@@ -1,0 +1,42 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: nody00/autobuy-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
+    - image: nody00/autobuy-event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
+    - image: nody00/autobuy-listings
+      context: listings
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
+    - image: nody00/autobuy-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.tsx"
+            dest: .

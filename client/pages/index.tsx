@@ -13,7 +13,7 @@ const LandingPage = () => {
   useEffect(() => {
     fetchListings();
   }, []);
-  return <div>landing page</div>;
+  return <div>landing page test</div>;
 };
 
 export default LandingPage;
