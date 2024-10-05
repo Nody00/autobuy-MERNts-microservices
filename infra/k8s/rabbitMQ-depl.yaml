@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:3-management
+          image: rabbitmq:4-management
           ports:
             - containerPort: 5672 # RabbitMQ port
             - containerPort: 15672 # Management UI port
@@ -29,7 +29,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbitmq-service
+  name: rabbitmq-srv
   labels:
     app: rabbitmq
 spec:
