@@ -14,7 +14,7 @@ const start = async () => {
       rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
       console.log("RABBITMQ connection intilized");
 
-      rabbit.initilizeConsumer();
+      rabbit.initilizeNewUserConsumer();
     });
   } catch (error) {}
 };

@@ -1,6 +1,6 @@
 import { Connection, Publisher, Consumer } from "rabbitmq-client";
 import { EventEmitter } from "events";
-
+import { newUser } from "../events/newUser";
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
@@ -30,7 +30,7 @@ class RabbitMQService extends EventEmitter {
     }
   }
 
-  async initilizeConsumer(): Promise<void> {
+  async initilizeNewUserConsumer(): Promise<void> {
     if (!this.connection) {
       throw new Error("Connection not initialized cannot initilize consumer");
     }
@@ -46,7 +46,8 @@ class RabbitMQService extends EventEmitter {
         queueBindings: [{ exchange: "auth-events", routingKey: "users.*" }],
       },
       async (msg) => {
-        console.log("Consumer message received", msg.body);
+        console.log("Consumer message received", msg);
+        newUser(msg.body);
       }
     );
   }
