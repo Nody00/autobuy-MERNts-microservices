@@ -6,10 +6,18 @@ deploy:
       - ./infra/k8s/*
 build:
   local:
-    push: false
+    push: true
   artifacts:
     - image: nody00/autobuy-auth
       context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
+    - image: nody00/autobuy-query
+      context: query
       docker:
         dockerfile: Dockerfile
       sync:

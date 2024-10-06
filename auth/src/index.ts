@@ -1,6 +1,6 @@
 import { app } from "./app";
 import { rabbit } from "./service/RabbitMQService";
-
+import mongoose from "mongoose";
 const start = async () => {
   console.log("Auth service V2 booting up...");
   try {
@@ -10,7 +10,10 @@ const start = async () => {
   app.listen(4001, () => {
     console.log("Auth service V2 listening on port 4001...");
 
+    mongoose.connect("mongodb://auth-mongo-srv:27017");
+
     rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
+    rabbit.initializePublisher();
   });
 };
 

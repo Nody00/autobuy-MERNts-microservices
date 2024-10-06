@@ -14,10 +14,6 @@ spec:
       containers:
         - name: listings-depl
           image: nody00/autobuy-listings
-          resources:
-            limits:
-              memory: "2048Mi"
-              cpu: "1000m"
 ---
 apiVersion: v1
 kind: Service

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: query-depl
 spec:
   selector:
     matchLabels:
-      app: auth
+      app: query
   template:
     metadata:
       labels:
-        app: auth
+        app: query
     spec:
       # Init container to ensure RabbitMQ is ready
       initContainers:
@@ -22,20 +22,18 @@ spec:
               "until nc -z rabbitmq-srv 5672; do echo waiting for rabbitmq; sleep 2; done;",
             ]
       containers:
-        - name: auth-depl
-          image: nody00/autobuy-auth
-          ports:
-            - containerPort: 4001
+        - name: query-depl
+          image: nody00/autobuy-query
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-clusterip-srv
+  name: query-clusterip-srv
 spec:
   selector:
-    app: auth
+    app: query
   ports:
-    - name: auth
+    - name: query
       protocol: TCP
-      port: 4001
-      targetPort: 4001
+      port: 4003
+      targetPort: 4003

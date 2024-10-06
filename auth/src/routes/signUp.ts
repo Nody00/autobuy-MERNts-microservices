@@ -2,7 +2,8 @@ import axios from "axios";
 import express from "express";
 import { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
-
+import { User } from "../models/user";
+import { rabbit } from "../service/RabbitMQService";
 interface SignUpRequestBody {
   username: string;
   password: string;
@@ -38,19 +39,14 @@ router.post(
       password: req.body.password,
     };
 
-    console.log("dinov log newUser", newUser);
+    const result = new User(newUser);
+    await result.save();
 
-    const result = await axios.post(
-      "http://event-bus-srv:5000/event-bus/new/event",
-      {
-        type: "newUser",
-        data: newUser,
-      }
-    );
+    const users = await User.find({});
 
-    console.log("dinov log result", result.data);
-
-    res.status(200).json(result.data);
+    // send a message to the query service
+    rabbit.sendMessage("auth-events", "users.new", newUser);
+    res.status(200).send({ message: "User created", data: users });
   }
 );
 
