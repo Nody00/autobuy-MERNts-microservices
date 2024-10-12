@@ -1,53 +1,42 @@
-import axios from "axios";
 import express from "express";
-import { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { User } from "../models/user";
-import { rabbit } from "../service/RabbitMQService";
-interface SignUpRequestBody {
-  username: string;
-  password: string;
-}
 
+import { body } from "express-validator";
+import { signUpController } from "../controllers/sign-up";
 const router = express.Router();
 
 router.post(
   "/users/sign-up",
   [
-    body("username")
+    body("email")
       .exists()
       .isString()
-      .isLength({ max: 20, min: 3 })
-      .withMessage("Username must be between 3 and 20 characters"),
+      .trim()
+      .isEmail()
+      .withMessage("Must be a valid email!"),
     body("password")
       .exists()
       .isString()
+      .trim()
       .isLength({ max: 30, min: 8 })
       .withMessage("Password must be between 8 and 30 characters"),
+    body("firstName")
+      .exists()
+      .isString()
+      .isLength({ max: 20 })
+      .withMessage("First name cannot be longer than 20 characters"),
+    body("lastName")
+      .exists()
+      .isString()
+      .isLength({ max: 20 })
+      .withMessage("Last name cannot be longer than 20 characters"),
+    body("phoneNumber")
+      .exists()
+      .isString()
+      .trim()
+      .isMobilePhone("any")
+      .withMessage("You must provide a valid phone number"),
   ],
-  async (req: Request<{}, {}, SignUpRequestBody>, res: Response) => {
-    // handle the errors
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    // logic for creating user
-
-    const newUser = {
-      username: req.body.username,
-      password: req.body.password,
-    };
-
-    const result = new User(newUser);
-    await result.save();
-
-    const users = await User.find({});
-
-    // send a message to the query service
-    rabbit.sendMessage("auth-events", "users.new", newUser);
-    res.status(200).send({ message: "User created", data: users });
-  }
+  signUpController
 );
 
 export { router as signUpRoute };
