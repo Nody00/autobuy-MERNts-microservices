@@ -8,6 +8,14 @@ const start = async () => {
   } catch (error) {}
 
   app.listen(4001, () => {
+    if (!process.env.COOKIE_SESSION_KEY) {
+      console.error("COOKIE SESSION KEY MISSING");
+      return;
+    }
+    if (!process.env.JWT_SECRET!) {
+      console.error("JWT SECRET MISSING");
+      return;
+    }
     console.log("Auth service V2 listening on port 4001...");
 
     mongoose.connect("mongodb://auth-mongo-srv:27017");

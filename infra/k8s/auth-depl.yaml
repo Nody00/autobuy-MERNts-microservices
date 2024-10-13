@@ -26,6 +26,17 @@ spec:
           image: nody00/autobuy-auth
           ports:
             - containerPort: 4001
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: jwtSecret
+            - name: COOKIE_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: cookieKey
 ---
 apiVersion: v1
 kind: Service

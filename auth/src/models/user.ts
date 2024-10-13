@@ -38,13 +38,6 @@ const userSchema = new Schema({
 userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ phoneNumber: 1 }, { unique: true });
 
-userSchema.set("toJSON", {
-  transform: (doc, ret) => {
-    delete ret.password;
-    return ret;
-  },
-});
-
 const User = mongoose.model("User", userSchema);
 
 export { User };

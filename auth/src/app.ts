@@ -10,8 +10,11 @@ app.set("trust proxy", true);
 app.use(json());
 app.use(
   cookieSession({
-    signed: false,
-    secure: false,
+    name: "session",
+    keys: [process.env.COOKIE_SESSION_KEY!], // Use a secure, randomly generated key
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    secure: false, // Secure cookies in production
+    httpOnly: true, // Prevents client-side JS from accessing the cookies
   })
 );
 

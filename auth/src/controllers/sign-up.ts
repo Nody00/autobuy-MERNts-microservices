@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { User } from "../models/user";
 import { rabbit } from "../service/RabbitMQService";
-import { hashPassword } from "../helpers/hashPassword";
+
+import { Password } from "../helpers/Password";
 
 interface SignUpRequestBody {
   email: string;
@@ -25,7 +26,7 @@ export const signUpController = async (
   const { email, password, firstName, lastName, phoneNumber } = req.body;
   // logic for creating user
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await Password.hashPassword(password);
 
   const newUser = {
     email,
