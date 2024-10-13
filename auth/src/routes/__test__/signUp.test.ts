@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
+import { rabbit } from "../../service/RabbitMQService";
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {
@@ -7,18 +8,31 @@ jest.mock("../../service/RabbitMQService", () => ({
   },
 }));
 
+jest.mock("../../helpers/hashPassword.ts", () => ({
+  hashPassword: jest.fn().mockResolvedValue("mockResolvedSaltValue"),
+}));
+
 describe("User Signup", () => {
   // Mock the User model methods
   it("returns a 201 on successful signup", async () => {
-    const response = await request(app).post("/auth/users/sign-up").send({
+    const newUser = {
       email: "testuser3@example.com",
       password: "TestPassword123",
       firstName: "John",
       lastName: "Doe",
       phoneNumber: "0952230241",
-    });
+    };
+    const response = await request(app)
+      .post("/auth/users/sign-up")
+      .send(newUser);
 
     expect(response.status).toBe(201);
+    expect(response.body.message).toEqual("User created");
+    expect(rabbit.sendMessage).toHaveBeenCalledWith(
+      "auth-events",
+      "users.new",
+      { ...newUser, password: "mockResolvedSaltValue" }
+    );
   });
 
   //   write more tests, finish signup and write tests for that

@@ -1,8 +1,8 @@
 import express from "express";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-import { signInRoute } from "./routes/signIn";
-import { signUpRoute } from "./routes/signUp";
+import { signInRoute } from "./routes/sign-in";
+import { signUpRoute } from "./routes/sign-up";
 const BASE_ROUTE = "/auth";
 const app = express();
 
