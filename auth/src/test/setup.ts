@@ -5,6 +5,9 @@ import { app } from "../app";
 let mongo: any;
 
 beforeAll(async () => {
+  process.env.COOKIE_SESSION_KEY = "test_cookie_session_key";
+  process.env.JWT_SECRET = "test_jwt_secret";
+
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri, {});
@@ -22,6 +25,9 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
+  delete process.env.COOKIE_SESSION_KEY;
+  delete process.env.JWT_SECRET;
+
   if (mongo) {
     await mongo.stop();
   }

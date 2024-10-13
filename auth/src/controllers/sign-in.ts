@@ -26,7 +26,7 @@ export const signInController = async (
   if (!fetchedUser) {
     return res.status(400).json({ message: "Invalid email or password!" });
   }
-  console.log("dinov log fetchedUser", fetchedUser);
+
   try {
     const passwordEqual = await Password.comparePasswords(
       password,
