@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import axios from "axios";
-const router = Router();
+const router = express.Router();
 
 router.post("/create", async (req: Request, res: Response) => {
   const newListing = {
