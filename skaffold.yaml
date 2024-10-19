@@ -24,14 +24,6 @@ build:
         manual:
           - src: "*.ts"
             dest: .
-    - image: nody00/autobuy-event-bus
-      context: event-bus
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: "*.ts"
-            dest: .
     - image: nody00/autobuy-listings
       context: listings
       docker:

@@ -11,9 +11,32 @@ spec:
       labels:
         app: listings
     spec:
+      # Init container to ensure RabbitMQ is ready
+      initContainers:
+        - name: wait-for-rabbitmq
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z rabbitmq-srv 5672; do echo waiting for rabbitmq; sleep 2; done;",
+            ]
       containers:
         - name: listings-depl
           image: nody00/autobuy-listings
+          ports:
+            - containerPort: 4002
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: jwtSecret
+            - name: COOKIE_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: cookieKey
 ---
 apiVersion: v1
 kind: Service
