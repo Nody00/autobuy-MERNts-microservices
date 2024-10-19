@@ -24,8 +24,8 @@ build:
         manual:
           - src: "*.ts"
             dest: .
-    - image: nody00/autobuy-listings
-      context: listings
+    - image: nody00/autobuy-listing
+      context: listing
       docker:
         dockerfile: Dockerfile
       sync:

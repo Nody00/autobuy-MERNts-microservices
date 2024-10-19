@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: listings-depl
+  name: listing-depl
 spec:
   selector:
     matchLabels:
-      app: listings
+      app: listing
   template:
     metadata:
       labels:
-        app: listings
+        app: listing
     spec:
       # Init container to ensure RabbitMQ is ready
       initContainers:
@@ -22,8 +22,8 @@ spec:
               "until nc -z rabbitmq-srv 5672; do echo waiting for rabbitmq; sleep 2; done;",
             ]
       containers:
-        - name: listings-depl
-          image: nody00/autobuy-listings
+        - name: listing-depl
+          image: nody00/autobuy-listing
           ports:
             - containerPort: 4002
           env:
@@ -41,12 +41,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: listings-clusterip-srv
+  name: listing-clusterip-srv
 spec:
   selector:
-    app: listings
+    app: listing
   ports:
-    - name: listings
+    - name: listing
       protocol: TCP
       port: 4002
       targetPort: 4002
