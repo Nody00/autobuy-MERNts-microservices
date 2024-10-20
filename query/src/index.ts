@@ -15,6 +15,7 @@ const start = async () => {
       console.log("RABBITMQ connection intilized");
 
       rabbit.initilizeNewUserConsumer();
+      rabbit.initilizeNewListingConsumer();
     });
   } catch (error) {}
 };

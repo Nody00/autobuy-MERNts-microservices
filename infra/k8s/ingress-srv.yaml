@@ -26,7 +26,7 @@ spec:
                 port:
                   number: 4001
           - pathType: Prefix
-            path: "/listing/"
+            path: "/listings/"
             backend:
               service:
                 name: listing-clusterip-srv
