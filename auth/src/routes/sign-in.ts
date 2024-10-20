@@ -1,5 +1,4 @@
 import express from "express";
-import { Request, Response } from "express";
 import { body } from "express-validator";
 import { signInController } from "../controllers/sign-in";
 

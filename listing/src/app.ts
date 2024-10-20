@@ -1,6 +1,5 @@
 import express from "express";
 import { json } from "body-parser";
-import cookieSession from "cookie-session";
 
 const BASE_ROUTE = "/listing";
 const app = express();

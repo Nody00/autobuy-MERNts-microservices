@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const userSchema = new Schema({
   email: {
@@ -33,10 +33,10 @@ const userSchema = new Schema({
   phoneVerified: {
     type: Boolean,
   },
+  saves: {
+    type: [Types.ObjectId],
+  },
 });
-
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ phoneNumber: 1 }, { unique: true });
 
 const User = mongoose.model("User", userSchema);
 
