@@ -57,6 +57,9 @@ const listingSchema = new Schema({
     required: true, // Reference to the user who created the listing
     ref: "User",
   },
+  deleted: {
+    type: Boolean,
+  },
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

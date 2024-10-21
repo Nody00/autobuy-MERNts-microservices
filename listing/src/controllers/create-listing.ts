@@ -15,12 +15,18 @@ interface RequestBody {
   userId: string;
 }
 
-export const createListingController = async (req: Request, res: Response) => {
+export const createListingController = async (
+  req: Request<{}, {}, RequestBody>,
+  res: Response
+) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
+  // console.log("THE REQUEST", req.headers.cookie);
+  // WRITE MIDDLEWARE TO CHECK IF LOGGED IN
   const newListing = { ...req.body };
   try {
     const result = new Listing(newListing);
