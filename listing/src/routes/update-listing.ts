@@ -70,3 +70,5 @@ router.patch(
   ],
   updateListingController
 );
+
+export { router as updateListingRouter };
