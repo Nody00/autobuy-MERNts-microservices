@@ -27,15 +27,20 @@ export const createListingController = async (
 
   // console.log("THE REQUEST", req.headers.cookie);
   // WRITE MIDDLEWARE TO CHECK IF LOGGED IN
-  const newListing = { ...req.body };
+  const newListing = {
+    ...req.body,
+    deleted: false,
+    status: "available",
+    views: 0,
+  };
   try {
     const result = new Listing(newListing);
     await result.save();
+
+    rabbit.sendMessage("listing-events", "listings.new", result);
+    return res.status(201).send({ message: "Listing created", data: result });
   } catch (error) {
     console.error("DB error on listing creation");
     return res.status(500).send({ message: "Could not create listing!" });
   }
-
-  rabbit.sendMessage("listing-events", "listings.new", newListing);
-  return res.status(201).send({ message: "Listing created" });
 };
