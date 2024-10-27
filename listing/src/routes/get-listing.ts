@@ -1,5 +1,5 @@
-import express, { Request } from "express";
-import { query, validationResult } from "express-validator";
+import express from "express";
+import { query } from "express-validator";
 import { getListingController } from "../controllers/get-listing";
 import { CATEGORIES } from "../helpers/categories";
 const router = express.Router();

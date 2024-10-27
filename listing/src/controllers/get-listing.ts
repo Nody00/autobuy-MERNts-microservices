@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Listing } from "../models/listing";
-
+import { validationResult } from "express-validator";
 interface ListingQuery {
   manufacturer?: string;
   model?: string;
@@ -25,6 +25,12 @@ export const getListingController = async (
   req: Request<{}, {}, {}, ListingQuery>,
   res: Response
 ) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const {
       manufacturer,
