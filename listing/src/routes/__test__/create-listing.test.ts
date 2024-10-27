@@ -22,7 +22,7 @@ describe("Listing creation", () => {
       description:
         "Well maintained vehicle with full service history. Features include air conditioning, power windows, and a premium sound system.",
       price: 25000,
-      category: 1, // Assuming "SEDAN" is one of your CATEGORIES values
+      category: 1,
     };
 
     const result = await request(app)
@@ -43,7 +43,7 @@ describe("Listing creation", () => {
       description:
         "Well maintained vehicle with full service history. Features include air conditioning, power windows, and a premium sound system.",
       price: 25000,
-      category: 1, // Assuming "SEDAN" is one of your CATEGORIES values
+      category: 1,
     };
 
     const response = await request(app)
