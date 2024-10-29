@@ -3,10 +3,13 @@ import { body } from "express-validator";
 import mongoose from "mongoose";
 import { CATEGORIES } from "../helpers/categories";
 import { createListingController } from "../controllers/create-listing";
+import { authMiddleware } from "../middleware/auth";
+
 const router = express.Router();
 
 router.post(
   "/new-listing",
+  authMiddleware,
   [
     body("userId")
       .isString()

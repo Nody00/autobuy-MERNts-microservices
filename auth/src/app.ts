@@ -3,6 +3,7 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { signInRoute } from "./routes/sign-in";
 import { signUpRoute } from "./routes/sign-up";
+import { refreshTokenRouter } from "./routes/refresh-token";
 const BASE_ROUTE = "/auth";
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(
 
 app.use(BASE_ROUTE, signInRoute);
 app.use(BASE_ROUTE, signUpRoute);
+app.use(BASE_ROUTE, refreshTokenRouter);
 
 app.all("*", async (req, res) => {
   res.status(404).send({ message: "Route not found" });

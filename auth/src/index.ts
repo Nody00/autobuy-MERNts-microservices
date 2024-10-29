@@ -16,6 +16,10 @@ const start = async () => {
       console.error("JWT SECRET MISSING");
       return;
     }
+    if (!process.env.REFRESH_JWT_SECRET!) {
+      console.error("REFRESH JWT SECRET MISSING");
+      return;
+    }
     console.log("Auth service V2 listening on port 4001...");
 
     mongoose.connect("mongodb://auth-mongo-srv:27017");

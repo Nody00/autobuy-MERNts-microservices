@@ -1,12 +1,13 @@
 import express from "express";
 import { body } from "express-validator";
-import mongoose from "mongoose";
 import { CATEGORIES } from "../helpers/categories";
-const router = express.Router();
 import { updateListingController } from "../controllers/update-listing";
+import { authMiddleware } from "../middleware/auth";
+const router = express.Router();
 
 router.patch(
   "/update-listing/:listingId",
+  authMiddleware,
   [
     body("manufacturer")
       .optional()
@@ -68,6 +69,7 @@ router.patch(
       })
       .withMessage("You must select a valid category."),
   ],
+  // @ts-ignore
   updateListingController
 );
 

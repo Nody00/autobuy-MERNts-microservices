@@ -2,29 +2,12 @@ import express from "express";
 import { query } from "express-validator";
 import { getListingController } from "../controllers/get-listing";
 import { CATEGORIES } from "../helpers/categories";
+import { authMiddleware } from "../middleware/auth";
 const router = express.Router();
-
-interface ListingQuery {
-  manufacturer?: string;
-  model?: string;
-  yearFrom?: string;
-  yearTo?: string;
-  priceMin?: string;
-  priceMax?: string;
-  mileageMax?: string;
-  category?: string;
-  status?: string;
-  isFeatured?: string;
-  negotiable?: string;
-  tags?: string;
-  sortBy?: string;
-  sortOrder?: string;
-  page?: string;
-  limit?: string;
-}
 
 router.get(
   "/get",
+  authMiddleware,
   [
     query("manufacturer")
       .optional()

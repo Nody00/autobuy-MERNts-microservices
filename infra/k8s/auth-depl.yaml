@@ -37,6 +37,11 @@ spec:
                 secretKeyRef:
                   name: cookie-secret
                   key: cookieKey
+            - name: REFRESH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-jwt-secret
+                  key: refreshJwtSecret
 ---
 apiVersion: v1
 kind: Service

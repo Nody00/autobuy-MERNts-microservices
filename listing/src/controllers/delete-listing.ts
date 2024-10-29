@@ -2,12 +2,14 @@ import { Request, Response } from "express";
 
 import { Listing } from "../models/listing";
 import mongoose from "mongoose";
+import { JwtPayload } from "jsonwebtoken";
 interface RequestParams {
   listingId: string;
+  user: string | JwtPayload;
 }
 
 export const deleteListingController = async (
-  req: Request<RequestParams, {}, {}>,
+  req: Request<RequestParams>,
   res: Response
 ) => {
   const { listingId } = req.params;
