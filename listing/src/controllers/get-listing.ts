@@ -155,6 +155,7 @@ export const getListingController = async (
           tags: 1,
           createdAt: 1,
           updatedAt: 1,
+          version: 1,
           //   user: {
           //     _id: "$userDetails._id",
           //     name: "$userDetails.name",

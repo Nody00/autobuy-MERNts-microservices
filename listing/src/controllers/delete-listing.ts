@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { Listing } from "../models/listing";
 import mongoose from "mongoose";
 import { JwtPayload } from "jsonwebtoken";
+import { rabbit } from "../service/RabbitMQService";
 interface RequestParams {
   listingId: string;
   user: string | JwtPayload;
@@ -27,9 +28,14 @@ export const deleteListingController = async (
 
     await Listing.updateOne(
       { _id: foundListing._id },
-      { $set: { deleted: true } }
+      { $set: { deleted: true }, $inc: { version: 1 } }
     );
 
+    const result = await Listing.findById(foundListing._id);
+    rabbit.sendMessage("listing-events", "listings.delete", {
+      ...result?.toObject(),
+      operation: "update",
+    });
     return res.status(200).send({ message: "Listing deleted!" });
   } catch (error) {
     console.error(error);

@@ -68,22 +68,22 @@ const listingSchema = new Schema({
 });
 
 // Indexes for frequently queried fields
-// listingSchema.index({ manufacturer: 1 });
-// listingSchema.index({ model: 1 });
-// listingSchema.index({ price: 1 });
-// listingSchema.index({ yearOfProduction: 1 });
-// listingSchema.index({ mileage: 1 });
-// listingSchema.index({ category: 1 });
-// listingSchema.index({ status: 1 });
-// listingSchema.index({ isFeatured: 1 });
-// listingSchema.index({ tags: 1 });
-// listingSchema.index({ deleted: 1 });
-// listingSchema.index({ createdAt: -1 }); // For default sorting
+listingSchema.index({ manufacturer: 1 });
+listingSchema.index({ model: 1 });
+listingSchema.index({ price: 1 });
+listingSchema.index({ yearOfProduction: 1 });
+listingSchema.index({ mileage: 1 });
+listingSchema.index({ category: 1 });
+listingSchema.index({ status: 1 });
+listingSchema.index({ isFeatured: 1 });
+listingSchema.index({ tags: 1 });
+listingSchema.index({ deleted: 1 });
+listingSchema.index({ createdAt: -1 }); // For default sorting
 
 // Compound indexes for common query combinations
-// listingSchema.index({ manufacturer: 1, model: 1 });
-// listingSchema.index({ category: 1, status: 1 });
-// listingSchema.index({ price: 1, yearOfProduction: 1 });
+listingSchema.index({ manufacturer: 1, model: 1 });
+listingSchema.index({ category: 1, status: 1 });
+listingSchema.index({ price: 1, yearOfProduction: 1 });
 
 const Listing = mongoose.model("Listing", listingSchema);
 
