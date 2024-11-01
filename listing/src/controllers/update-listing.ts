@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 import { Listing } from "../models/listing";
-
+import { rabbit } from "../service/RabbitMQService";
 interface RequestParams {
   listingId: string;
 }
@@ -50,10 +50,17 @@ export const updateListingController = async (
       { _id: listingId },
       {
         $set: newData,
+        $inc: { version: 1 },
       }
     );
 
-    return res.status(204).send({ message: "Listing updated!" });
+    const result = await Listing.findById(listingId);
+
+    rabbit.sendMessage("listing-events", "listings.update", {
+      ...result?.toObject(),
+      operation: "update",
+    });
+    return res.status(204).send({ message: "Listing updated!", data: result });
   } catch (error) {
     console.log(error);
     res.send(500).send({ message: "Internal server error!" });

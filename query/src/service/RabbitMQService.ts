@@ -1,6 +1,12 @@
-import { Connection, Publisher, Consumer } from "rabbitmq-client";
+import {
+  Connection,
+  Publisher,
+  Consumer,
+  ConsumerStatus,
+} from "rabbitmq-client";
 import { EventEmitter } from "events";
 import { newUser } from "../events/newUser";
+import { handleListingEvent } from "../events/handleListingEvent";
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
@@ -70,8 +76,13 @@ class RabbitMQService extends EventEmitter {
         ],
       },
       async (msg) => {
-        console.log("Listing Consumer message received", msg);
-        // newUser(msg.body);
+        try {
+          await handleListingEvent(msg);
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.log("Query handler error", error);
+          return ConsumerStatus.REQUEUE;
+        }
       }
     );
   }

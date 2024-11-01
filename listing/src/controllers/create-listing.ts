@@ -25,8 +25,6 @@ export const createListingController = async (
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // console.log("THE REQUEST", req.headers.cookie);
-  // WRITE MIDDLEWARE TO CHECK IF LOGGED IN
   const newListing = {
     ...req.body,
     deleted: false,
@@ -37,7 +35,10 @@ export const createListingController = async (
     const result = new Listing(newListing);
     await result.save();
 
-    rabbit.sendMessage("listing-events", "listings.new", result);
+    rabbit.sendMessage("listing-events", "listings.new", {
+      ...result.toObject(),
+      operation: "create",
+    });
     return res.status(201).send({ message: "Listing created", data: result });
   } catch (error) {
     console.error("DB error on listing creation");
