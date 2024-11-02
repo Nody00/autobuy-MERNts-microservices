@@ -11,6 +11,18 @@ jest.mock("../../service/RabbitMQService", () => ({
   },
 }));
 
+jest.mock("../../middleware/auth.ts", () => ({
+  authMiddleware: jest.fn((res, req, next) => {
+    req.user = {
+      // this can be fillled in to suite implementation
+      userId: "sadadsasd",
+      userName: "test",
+    };
+
+    next();
+  }),
+}));
+
 const createListing = async () => {
   const newListing = {
     userId: "507f1f77bcf86cd799439011", // Valid MongoDB ObjectId format

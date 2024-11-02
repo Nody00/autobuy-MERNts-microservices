@@ -24,6 +24,24 @@ spec:
       containers:
         - name: query-depl
           image: nody00/autobuy-query
+          ports:
+            - containerPort: 4003
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: jwtSecret
+            - name: COOKIE_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: cookieKey
+            - name: REFRESH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-jwt-secret
+                  key: refreshJwtSecret
 ---
 apiVersion: v1
 kind: Service

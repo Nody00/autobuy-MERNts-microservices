@@ -3,7 +3,7 @@ import { json } from "body-parser";
 import { createListingRouter } from "./routes/create-listing";
 import { updateListingRouter } from "./routes/update-listing";
 import { deleteListingRouter } from "./routes/delete-listing";
-import { getListingRouter } from "./routes/get-listing";
+
 import cookieSession from "cookie-session";
 const BASE_ROUTE = "/listings";
 const app = express();
@@ -23,7 +23,6 @@ app.use(
 app.use(BASE_ROUTE, createListingRouter);
 app.use(BASE_ROUTE, deleteListingRouter);
 app.use(BASE_ROUTE, updateListingRouter);
-app.use(BASE_ROUTE, getListingRouter);
 
 app.all("*", async (req, res) => {
   res.status(404).send({ message: "Route not found" });

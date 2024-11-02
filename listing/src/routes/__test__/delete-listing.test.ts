@@ -3,6 +3,26 @@ import { app } from "../../app";
 import { Listing } from "../../models/listing";
 import mongoose from "mongoose";
 
+jest.mock("../../middleware/auth.ts", () => ({
+  authMiddleware: jest.fn((res, req, next) => {
+    req.user = {
+      // this can be fillled in to suite implementation
+      userId: "sadadsasd",
+      userName: "test",
+    };
+
+    next();
+  }),
+}));
+
+jest.mock("../../service/RabbitMQService", () => ({
+  rabbit: {
+    sendMessage: jest.fn((exchange: string, topic: string, data) => {}),
+    connect: jest.fn(),
+    initializePublisher: jest.fn(),
+  },
+}));
+
 const createListing = async () => {
   const newListing = {
     userId: "507f1f77bcf86cd799439011", // Valid MongoDB ObjectId format

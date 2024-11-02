@@ -6,7 +6,7 @@ import { authMiddleware } from "../middleware/auth";
 const router = express.Router();
 
 router.get(
-  "/get",
+  "/listing",
   authMiddleware,
   [
     query("manufacturer")

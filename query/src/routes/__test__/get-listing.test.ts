@@ -3,6 +3,18 @@ import { app } from "../../app";
 import mongoose from "mongoose";
 import { Listing } from "../../models/listing";
 
+jest.mock("../../middleware/auth.ts", () => ({
+  authMiddleware: jest.fn((res, req, next) => {
+    req.user = {
+      // this can be fillled in to suite implementation
+      userId: "sadadsasd",
+      userName: "test",
+    };
+
+    next();
+  }),
+}));
+
 describe("Get listings", () => {
   // Setup test data
   const createSampleListings = async () => {
@@ -63,7 +75,7 @@ describe("Get listings", () => {
   });
 
   it("returns 200 and all listings with the default pagination", async () => {
-    const response = await request(app).get("/listings/get").expect(200);
+    const response = await request(app).get("/query/listing").expect(200);
 
     expect(response.status).toBe(200);
     expect(response.body.data.listings.length).toBe(3);
@@ -77,7 +89,7 @@ describe("Get listings", () => {
 
   it("filters by manufacturer", async () => {
     const response = await request(app)
-      .get("/listings/get?manufacturer=toyota")
+      .get("/query/listing?manufacturer=toyota")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(1);
@@ -86,7 +98,7 @@ describe("Get listings", () => {
 
   it("filters by price range", async () => {
     const response = await request(app)
-      .get("/listings/get?priceMin=22000&priceMax=30000")
+      .get("/query/listing?priceMin=22000&priceMax=30000")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(1);
@@ -95,7 +107,7 @@ describe("Get listings", () => {
 
   it("filters by year range", async () => {
     const response = await request(app)
-      .get("/listings/get?yearFrom=2020&yearTo=2021")
+      .get("/query/listing?yearFrom=2020&yearTo=2021")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(2);
@@ -103,7 +115,7 @@ describe("Get listings", () => {
 
   it("filters by category", async () => {
     const response = await request(app)
-      .get("/listings/get?category=1")
+      .get("/query/listing?category=1")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(2);
@@ -111,7 +123,7 @@ describe("Get listings", () => {
 
   it("filters by featured status", async () => {
     const response = await request(app)
-      .get("/listings/get?isFeatured=true")
+      .get("/query/listing?isFeatured=true")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(2);
@@ -122,7 +134,7 @@ describe("Get listings", () => {
 
   it("filters by tags", async () => {
     const response = await request(app)
-      .get("/listings/get?tags=automatic,luxury")
+      .get("/query/listing?tags=automatic,luxury")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(2);
@@ -130,7 +142,7 @@ describe("Get listings", () => {
 
   it("sorts by price in ascending order", async () => {
     const response = await request(app)
-      .get("/listings/get?sortBy=price&sortOrder=asc")
+      .get("/query/listing?sortBy=price&sortOrder=asc")
       .expect(200);
 
     const prices = response.body.data.listings.map(
@@ -142,7 +154,7 @@ describe("Get listings", () => {
 
   it("handles pagination correctly", async () => {
     const response = await request(app)
-      .get("/listings/get?page=1&limit=2")
+      .get("/query/listing?page=1&limit=2")
       .expect(200);
 
     expect(response.body.data.listings.length).toBe(2);
@@ -155,7 +167,7 @@ describe("Get listings", () => {
   });
 
   it("handles invalid query parameters gracefully", async () => {
-    const response = await request(app).get("/listings/get?yearFrom=invalid");
+    const response = await request(app).get("/query/listing?yearFrom=invalid");
 
     expect(response.status).toBe(400);
   });

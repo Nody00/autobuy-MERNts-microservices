@@ -5,8 +5,8 @@ const start = async () => {
   console.log("Query service booting up...");
   try {
     // connect to mongoose and stuff
-    app.listen(3000, () => {
-      console.log("Query listening on port 3000...");
+    app.listen(4003, () => {
+      console.log("Query listening on port 4003...");
 
       mongoose.connect("mongodb://query-mongo-srv:27017");
       console.log("Mongodb connection intilized");

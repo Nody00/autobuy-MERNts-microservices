@@ -10,6 +10,18 @@ jest.mock("../../service/RabbitMQService", () => ({
   },
 }));
 
+jest.mock("../../middleware/auth.ts", () => ({
+  authMiddleware: jest.fn((res, req, next) => {
+    req.user = {
+      // this can be fillled in to suite implementation
+      userId: "sadadsasd",
+      userName: "test",
+    };
+
+    next();
+  }),
+}));
+
 describe("Listing creation", () => {
   it("returns a 400 error if wrong input data is provided", async () => {
     const newListing = {

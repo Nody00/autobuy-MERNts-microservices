@@ -17,6 +17,7 @@ interface RequestBody {
   price: number;
   category: number;
   userId: string;
+  version: number;
 }
 export const updateListingController = async (
   req: Request<RequestParams, {}, RequestBody>,
@@ -34,7 +35,7 @@ export const updateListingController = async (
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const newData = req.body;
+  const { version, ...newData } = req.body as RequestBody;
 
   try {
     const foundListing = await Listing.findOne({
@@ -49,7 +50,7 @@ export const updateListingController = async (
     await Listing.updateOne(
       { _id: listingId },
       {
-        $set: newData,
+        $set: { ...newData },
         $inc: { version: 1 },
       }
     );
@@ -63,6 +64,6 @@ export const updateListingController = async (
     return res.status(204).send({ message: "Listing updated!", data: result });
   } catch (error) {
     console.log(error);
-    res.send(500).send({ message: "Internal server error!" });
+    res.status(500).send({ message: "Internal server error!" });
   }
 };

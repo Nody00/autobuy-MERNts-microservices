@@ -32,3 +32,10 @@ spec:
                 name: listing-clusterip-srv
                 port:
                   number: 4002
+          - pathType: Prefix
+            path: "/query/"
+            backend:
+              service:
+                name: query-clusterip-srv
+                port:
+                  number: 4003
