@@ -1,6 +1,5 @@
 import request from "supertest";
 import { app } from "../../app";
-import { rabbit } from "../../service/RabbitMQService";
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {

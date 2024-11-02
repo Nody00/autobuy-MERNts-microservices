@@ -7,6 +7,7 @@ let mongo: any;
 beforeAll(async () => {
   process.env.COOKIE_SESSION_KEY = "test_cookie_session_key";
   process.env.JWT_SECRET = "test_jwt_secret";
+  process.env.REFRESH_JWT_SECRET = "test_refresh_jwt_secret";
 
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();

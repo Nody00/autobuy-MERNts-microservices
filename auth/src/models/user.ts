@@ -36,6 +36,12 @@ const userSchema = new Schema({
   saves: {
     type: [Types.ObjectId],
   },
+  deleted: {
+    type: Boolean,
+  },
+  version: {
+    type: Number,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
