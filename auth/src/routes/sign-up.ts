@@ -35,6 +35,10 @@ router.post(
       .trim()
       .isMobilePhone("any")
       .withMessage("You must provide a valid phone number"),
+    body("isAdmin")
+      .exists()
+      .isBoolean()
+      .withMessage("You must specify the kind of user!"),
   ],
   signUpController
 );

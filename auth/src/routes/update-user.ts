@@ -3,11 +3,13 @@ import { body, param } from "express-validator";
 import { authMiddleware } from "../middleware/auth";
 import mongoose from "mongoose";
 import { updateUserController } from "../controllers/update-user";
+import { permissionMiddleware } from "../middleware/permissionMiddleware";
 const router = express.Router();
 
 router.patch(
   "/users/:id",
   authMiddleware,
+  permissionMiddleware("update", "users"),
   [
     param("id").custom((value) => {
       if (!mongoose.Types.ObjectId.isValid(value)) {

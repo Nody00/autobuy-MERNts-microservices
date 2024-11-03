@@ -1,13 +1,15 @@
 import { app } from "./app";
 import { rabbit } from "./service/RabbitMQService";
 import mongoose from "mongoose";
+import { InitializeRoles } from "./helpers/InitilizeRoles";
+
 const start = async () => {
   console.log("Auth service V2 booting up...");
   try {
     // connect to mongoose and stuff
   } catch (error) {}
 
-  app.listen(4001, () => {
+  app.listen(4001, async () => {
     if (!process.env.COOKIE_SESSION_KEY) {
       console.error("COOKIE SESSION KEY MISSING");
       return;
@@ -22,10 +24,13 @@ const start = async () => {
     }
     console.log("Auth service V2 listening on port 4001...");
 
-    mongoose.connect("mongodb://auth-mongo-srv:27017");
+    await mongoose.connect("mongodb://auth-mongo-srv:27017");
 
-    rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
-    rabbit.initializePublisher();
+    // To make sure the default roles are already in the DB
+    await InitializeRoles();
+
+    await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
+    await rabbit.initializePublisher();
   });
 };
 

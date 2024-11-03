@@ -21,7 +21,7 @@ export const signInController = async (
 
   const { email, password } = req.body;
 
-  const fetchedUser = await User.findOne({ email });
+  const fetchedUser = await User.findOne({ email }).populate("role");
 
   if (!fetchedUser) {
     return res.status(400).json({ message: "Invalid email or password!" });
@@ -48,6 +48,8 @@ export const signInController = async (
     firstName: fetchedUser.firstName,
     lastName: fetchedUser.lastName,
     phoneNumber: fetchedUser.phoneNumber,
+    // @ts-ignore
+    permissions: fetchedUser.role.permissions,
   });
 
   const refreshToken = await TokenHelper.generateRefreshToken(

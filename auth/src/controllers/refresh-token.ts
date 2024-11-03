@@ -30,7 +30,7 @@ export const refreshTokenController = async (req: Request, res: Response) => {
     }
 
     // Get user and generate new access token
-    const user = await User.findById(payload.userId);
+    const user = await User.findById(payload.userId).populate("role");
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
@@ -41,6 +41,8 @@ export const refreshTokenController = async (req: Request, res: Response) => {
       firstName: user.firstName,
       lastName: user.lastName,
       phoneNumber: user.phoneNumber,
+      // @ts-ignore
+      permissions: user.role.permissions,
     });
 
     // Update session

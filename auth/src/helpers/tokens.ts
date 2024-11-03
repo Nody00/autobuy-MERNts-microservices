@@ -1,13 +1,14 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
 import { RefreshToken } from "../models/refresh-token";
-
+import { Permission } from "../models/roles";
 interface User {
   _id: string;
   email: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  permissions: Permissions[];
 }
 
 export class TokenHelper {
@@ -19,6 +20,7 @@ export class TokenHelper {
         firstName: user.firstName,
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
+        permissions: user.permissions,
       },
       process.env.JWT_SECRET!,
       { expiresIn: "15m" } // Short lived token

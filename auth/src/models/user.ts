@@ -42,6 +42,17 @@ const userSchema = new Schema({
   version: {
     type: Number,
   },
+  isAdmin: {
+    type: Boolean,
+  },
+  isCustomer: {
+    type: Boolean,
+  },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
+    required: true,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
