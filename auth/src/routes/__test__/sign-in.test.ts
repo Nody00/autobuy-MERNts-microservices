@@ -8,6 +8,7 @@ const signUpHelper = async () => {
     firstName: "John",
     lastName: "Doe",
     phoneNumber: "0952230241",
+    isAdmin: true,
   };
   const response = await request(app).post("/auth/users/sign-up").send(newUser);
 };

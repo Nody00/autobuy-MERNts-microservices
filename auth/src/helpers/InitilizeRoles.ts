@@ -9,7 +9,7 @@ export const InitializeRoles = async () => {
         { upsert: true, new: true }
       );
     }
-    console.log("Roles initialized successfully");
+    // console.log("Roles initialized successfully");
   } catch (error) {
     console.error("Error initializing roles:", error);
     throw error;

@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
+import { NextFunction } from "express";
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {
@@ -19,6 +20,14 @@ jest.mock("../../middleware/auth.ts", () => ({
     };
 
     next();
+  }),
+}));
+
+jest.mock("../../middleware/permissionMiddleware.ts", () => ({
+  permissionMiddleware: jest.fn((action: string, resource: string) => {
+    return (res: Response, req: Request, next: NextFunction) => {
+      next();
+    };
   }),
 }));
 

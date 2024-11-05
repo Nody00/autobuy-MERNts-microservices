@@ -18,6 +18,7 @@ describe("User sign up", () => {
       firstName: "John",
       lastName: "Doe",
       phoneNumber: "0952230241",
+      isAdmin: true,
     };
     const response = await request(app)
       .post("/auth/users/sign-up")
@@ -40,6 +41,7 @@ describe("User sign up", () => {
       firstName: "John",
       lastName: "Doe",
       phoneNumber: "0", // invalid
+      isAdmin: true,
     };
 
     const response = await request(app)
@@ -57,6 +59,7 @@ describe("User sign up", () => {
       firstName: "John",
       lastName: "Doe",
       phoneNumber: "0952230241",
+      isAdmin: true,
     };
 
     await request(app).post("/auth/users/sign-up").send(newUser);

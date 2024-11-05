@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { app } from "../app";
+import { InitializeRoles } from "../helpers/InitilizeRoles";
 
 let mongo: any;
 
@@ -23,6 +24,8 @@ beforeEach(async () => {
   for (let collection of collections) {
     await collection.deleteMany();
   }
+
+  await InitializeRoles();
 });
 
 afterAll(async () => {
