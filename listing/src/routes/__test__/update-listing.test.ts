@@ -2,6 +2,9 @@ import request from "supertest";
 import { app } from "../../app";
 import { Listing } from "../../models/listing";
 import mongoose from "mongoose";
+import { Request, Response, NextFunction } from "express";
+
+const FAKE_USER_ID = new mongoose.Types.ObjectId();
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {
@@ -12,10 +15,10 @@ jest.mock("../../service/RabbitMQService", () => ({
 }));
 
 jest.mock("../../middleware/auth.ts", () => ({
-  authMiddleware: jest.fn((res, req, next) => {
+  authMiddleware: jest.fn((req, res, next) => {
     req.user = {
       // this can be fillled in to suite implementation
-      userId: "sadadsasd",
+      id: FAKE_USER_ID,
       userName: "test",
     };
 
@@ -23,9 +26,17 @@ jest.mock("../../middleware/auth.ts", () => ({
   }),
 }));
 
+jest.mock("../../middleware/permissionMiddleware.ts", () => ({
+  permissionMiddleware: jest.fn((action: string, resource: string) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      // the permission middleware should be tested independently
+      next();
+    };
+  }),
+}));
+
 const createListing = async () => {
   const newListing = {
-    userId: "507f1f77bcf86cd799439011", // Valid MongoDB ObjectId format
     manufacturer: "Toyota",
     model: "Camry",
     yearOfProduction: 2020,

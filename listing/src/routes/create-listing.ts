@@ -11,17 +11,6 @@ router.post(
   "/new-listing",
   authMiddleware,
   [
-    body("userId")
-      .isString()
-      .withMessage("userId must be a string.")
-      .custom((value) => {
-        if (!mongoose.Types.ObjectId.isValid(value)) {
-          throw new Error("Invalid userId.");
-        }
-        return true;
-      })
-      .withMessage("Invalid userId"),
-
     body("manufacturer")
       .isString()
       .withMessage("Manufacturer must be a string.")

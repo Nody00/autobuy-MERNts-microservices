@@ -3,11 +3,13 @@ import { body } from "express-validator";
 import { CATEGORIES } from "../helpers/categories";
 import { updateListingController } from "../controllers/update-listing";
 import { authMiddleware } from "../middleware/auth";
+import { permissionMiddleware } from "../middleware/permissionMiddleware";
 const router = express.Router();
 
 router.patch(
   "/update-listing/:listingId",
   authMiddleware,
+  permissionMiddleware("update", "listings"),
   [
     body("manufacturer")
       .optional()

@@ -16,7 +16,6 @@ interface RequestBody {
   description: string | null;
   price: number;
   category: number;
-  userId: string;
   version: number;
 }
 export const updateListingController = async (

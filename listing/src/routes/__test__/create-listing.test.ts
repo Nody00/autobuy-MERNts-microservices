@@ -1,6 +1,10 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Listing } from "../../models/listing";
+import { Response, Request, NextFunction } from "express";
+import mongoose from "mongoose";
+
+const FAKE_USER_ID = new mongoose.Types.ObjectId();
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {
@@ -11,14 +15,23 @@ jest.mock("../../service/RabbitMQService", () => ({
 }));
 
 jest.mock("../../middleware/auth.ts", () => ({
-  authMiddleware: jest.fn((res, req, next) => {
+  authMiddleware: jest.fn((req, res, next) => {
     req.user = {
       // this can be fillled in to suite implementation
-      userId: "sadadsasd",
+      id: FAKE_USER_ID,
       userName: "test",
     };
 
     next();
+  }),
+}));
+
+jest.mock("../../middleware/permissionMiddleware.ts", () => ({
+  permissionMiddleware: jest.fn((action: string, resource: string) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      // the permission middleware should be tested independently
+      next();
+    };
   }),
 }));
 
@@ -46,7 +59,6 @@ describe("Listing creation", () => {
 
   it("returns a 201 status if successful and creates a listing", async () => {
     const newListing = {
-      userId: "507f1f77bcf86cd799439011", // Valid MongoDB ObjectId format
       manufacturer: "Toyota",
       model: "Camry",
       yearOfProduction: 2020,
@@ -62,7 +74,9 @@ describe("Listing creation", () => {
       .post("/listings/new-listing")
       .send(newListing);
 
-    const createdListing = await Listing.findOne({ userId: newListing.userId });
+    const createdListing = await Listing.findOne({
+      userId: FAKE_USER_ID.toString(),
+    });
 
     expect(response.status).toBe(201);
     expect(createdListing!._id).toBeDefined();

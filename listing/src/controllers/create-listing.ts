@@ -25,11 +25,19 @@ export const createListingController = async (
     return res.status(400).json({ errors: errors.array() });
   }
 
+  // @ts-ignore
+  const { id } = req.user || {};
+
+  if (!id) {
+    return res.status(400).send({ message: "User information not provided!" });
+  }
+
   const newListing = {
     ...req.body,
     deleted: false,
     status: "available",
     views: 0,
+    userId: id.toString(),
   };
   try {
     const result = new Listing(newListing);
