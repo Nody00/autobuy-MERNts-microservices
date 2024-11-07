@@ -20,8 +20,14 @@ export const saveListingController = async (
     return res.status(400).json({ errors: errors.array() });
   }
   // get user data from request, get listing id from params
-  const { id } = req.user;
+  const { id } = req.user || {};
+
+  if (!id) {
+    return res.status(400).send({ message: "User information not provided!" });
+  }
+
   const { listingId } = req.params;
+
   const userObjectId = new mongoose.Types.ObjectId(id);
   const foundListing = await Listing.findById(listingId);
 
@@ -29,15 +35,21 @@ export const saveListingController = async (
     return res.status(404).send({ message: "Listing not found!" });
   }
 
-  const isListingAlreadySaved = foundListing.savedBy.find(
-    (el) => el.toString() === id
-  );
+  let isListingAlreadySaved = false;
+
+  foundListing.savedBy.forEach((el) => {
+    if (el.toString() === id.toString()) {
+      isListingAlreadySaved = true;
+    }
+  });
 
   // if user already saved the listing remove it from the array
   try {
     if (isListingAlreadySaved) {
       const newListing = {
-        savedBy: foundListing.savedBy.filter((el) => el.toString() !== id),
+        savedBy: foundListing.savedBy.filter(
+          (el) => el.toString() !== id.toString()
+        ),
       };
 
       await Listing.updateOne(
