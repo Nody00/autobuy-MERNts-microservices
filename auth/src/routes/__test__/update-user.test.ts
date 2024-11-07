@@ -1,7 +1,10 @@
 import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
-import { NextFunction } from "express";
+import { NextFunction, Response, Request } from "express";
+import mongoose from "mongoose";
+
+const FAKE_USER_ID = new mongoose.Types.ObjectId();
 
 jest.mock("../../service/RabbitMQService", () => ({
   rabbit: {
@@ -12,10 +15,10 @@ jest.mock("../../service/RabbitMQService", () => ({
 }));
 
 jest.mock("../../middleware/auth.ts", () => ({
-  authMiddleware: jest.fn((res, req, next) => {
+  authMiddleware: jest.fn((req, res, next) => {
     req.user = {
       // this can be fillled in to suite implementation
-      userId: "sadadsasd",
+      id: FAKE_USER_ID,
       userName: "test",
     };
 
@@ -25,7 +28,8 @@ jest.mock("../../middleware/auth.ts", () => ({
 
 jest.mock("../../middleware/permissionMiddleware.ts", () => ({
   permissionMiddleware: jest.fn((action: string, resource: string) => {
-    return (res: Response, req: Request, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      // the permission middleware should be tested independently
       next();
     };
   }),
