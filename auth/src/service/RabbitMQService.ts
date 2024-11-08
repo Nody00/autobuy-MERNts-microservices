@@ -1,9 +1,15 @@
-import { Connection, Publisher } from "rabbitmq-client";
+import {
+  Connection,
+  Publisher,
+  Consumer,
+  ConsumerStatus,
+} from "rabbitmq-client";
 import { EventEmitter } from "events";
 
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
+  private consumer: Consumer | null = null;
 
   constructor() {
     super(); // Call the parent constructor
@@ -50,6 +56,31 @@ class RabbitMQService extends EventEmitter {
       this.emit("error", error);
       // throw error; // Propagate the error if needed
     }
+  }
+
+  async initilizeListingBookmarkConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initilized cannot initilize consumer");
+    }
+
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "auth-bookmark-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "listing-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [
+          { exchange: "listing-events", routingKey: "bookmark.*.*" },
+        ],
+      },
+      async (msg) => {
+        console.log("Bookmark message received", msg);
+        // return ConsumerStatus.ACK;
+      }
+    );
   }
 
   async sendMessage(

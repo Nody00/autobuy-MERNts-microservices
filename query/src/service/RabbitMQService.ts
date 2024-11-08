@@ -64,7 +64,7 @@ class RabbitMQService extends EventEmitter {
     }
     this.consumer = this.connection.createConsumer(
       {
-        queue: "listing-events-queue",
+        queue: "query-listing-events-queue",
         queueOptions: { durable: true },
         // handle 2 messages at a time
         qos: { prefetchCount: 2 },

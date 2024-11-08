@@ -22,7 +22,6 @@ const start = async () => {
       console.error("REFRESH JWT SECRET MISSING");
       return;
     }
-    console.log("Auth service V2 listening on port 4001...");
 
     await mongoose.connect("mongodb://auth-mongo-srv:27017");
 
@@ -31,6 +30,8 @@ const start = async () => {
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
     await rabbit.initializePublisher();
+    await rabbit.initilizeListingBookmarkConsumer();
+    console.log("Auth service V2 listening on port 4001...");
   });
 };
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Listing } from "../models/listing";
 import mongoose from "mongoose";
-
+import { rabbit } from "../service/RabbitMQService";
 interface saveListingRequest extends Request {
   user: {
     id: string;
@@ -42,7 +42,7 @@ export const saveListingController = async (
       isListingAlreadySaved = true;
     }
   });
-
+  console.log("Operation:", isListingAlreadySaved ? "remove" : "add");
   // if user already saved the listing remove it from the array
   try {
     if (isListingAlreadySaved) {
@@ -59,7 +59,12 @@ export const saveListingController = async (
           $inc: { version: 1 },
         }
       );
-      // rabbitmq message which should tell the user and query service how to update their user
+
+      rabbit.sendMessage("listing-events", "bookmark.listings.remove", {
+        listingId,
+        userId: id,
+        operation: "remove",
+      });
       return res.status(200).send({ message: "Listing save removed!" });
     }
 
@@ -79,7 +84,12 @@ export const saveListingController = async (
           $inc: { version: 1 },
         }
       );
-      // rabbitmq message which should tell the user and query service how to update their user
+
+      rabbit.sendMessage("listing-events", "bookmark.listings.add", {
+        listingId,
+        userId: id,
+        operation: "add",
+      });
       return res.status(200).send({ message: "Listing saved!" });
     }
   } catch (error) {
