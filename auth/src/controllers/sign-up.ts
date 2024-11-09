@@ -52,6 +52,7 @@ export const signUpController = async (
     lastName,
     phoneNumber,
     role: userRole._id,
+    version: 1,
   };
 
   try {
@@ -59,7 +60,10 @@ export const signUpController = async (
     await result.save();
 
     // send a message to the query service
-    rabbit.sendMessage("auth-events", "users.new", newUser);
+    rabbit.sendMessage("auth-events", "users.new", {
+      data: result,
+      operation: "create",
+    });
     return res.status(201).send({ message: "User created", data: result });
   } catch (error) {
     console.log("DB error on user creation", error);

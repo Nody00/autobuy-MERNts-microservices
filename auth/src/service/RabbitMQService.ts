@@ -5,6 +5,7 @@ import {
   ConsumerStatus,
 } from "rabbitmq-client";
 import { EventEmitter } from "events";
+import { handleBookMarkEvent } from "../events/handleBookmarkEvent";
 
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
@@ -77,8 +78,18 @@ class RabbitMQService extends EventEmitter {
         ],
       },
       async (msg) => {
-        console.log("Bookmark message received", msg);
-        // return ConsumerStatus.ACK;
+        try {
+          await handleBookMarkEvent({
+            userId: msg.body?.userId,
+            listingId: msg.body?.listingId,
+            operation: msg.body?.operation,
+          });
+
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.error(error);
+          return ConsumerStatus.DROP;
+        }
       }
     );
   }

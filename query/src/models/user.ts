@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const userSchema = new Schema({
   email: {
@@ -32,6 +32,26 @@ const userSchema = new Schema({
   },
   phoneVerified: {
     type: Boolean,
+  },
+  saves: {
+    type: [Types.ObjectId], // ids of listings the user saved(bookmarked)
+  },
+  deleted: {
+    type: Boolean,
+  },
+  version: {
+    type: Number,
+  },
+  isAdmin: {
+    type: Boolean,
+  },
+  isCustomer: {
+    type: Boolean,
+  },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
+    // required: true,
   },
 });
 

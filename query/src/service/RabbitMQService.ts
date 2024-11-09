@@ -5,8 +5,9 @@ import {
   ConsumerStatus,
 } from "rabbitmq-client";
 import { EventEmitter } from "events";
-import { newUser } from "../events/newUser";
 import { handleListingEvent } from "../events/handleListingEvent";
+import { handleBookMarkEvent } from "../events/handleBookmarkEvent";
+import { handleUserEvent } from "../events/handleUserEvent";
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
@@ -36,13 +37,13 @@ class RabbitMQService extends EventEmitter {
     }
   }
 
-  async initilizeNewUserConsumer(): Promise<void> {
+  async initilizeUserEventConsumer(): Promise<void> {
     if (!this.connection) {
       throw new Error("Connection not initialized cannot initilize consumer");
     }
     this.consumer = this.connection.createConsumer(
       {
-        queue: "auth-events-queue",
+        queue: "query-user-events-queue",
         queueOptions: { durable: true },
         // handle 2 messages at a time
         qos: { prefetchCount: 2 },
@@ -52,8 +53,12 @@ class RabbitMQService extends EventEmitter {
         queueBindings: [{ exchange: "auth-events", routingKey: "users.*" }],
       },
       async (msg) => {
-        console.log("Consumer message received", msg);
-        newUser(msg.body);
+        try {
+          await handleUserEvent(msg.body);
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          return ConsumerStatus.DROP;
+        }
       }
     );
   }
@@ -81,7 +86,42 @@ class RabbitMQService extends EventEmitter {
           return ConsumerStatus.ACK;
         } catch (error) {
           console.log("Query handler error", error);
-          return ConsumerStatus.REQUEUE;
+          return ConsumerStatus.DROP;
+        }
+      }
+    );
+  }
+
+  async initilizeListingBookmarkConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initilized cannot initilize consumer");
+    }
+
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "listing-bookmark-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "listing-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [
+          { exchange: "listing-events", routingKey: "bookmark.*.*" },
+        ],
+      },
+      async (msg) => {
+        try {
+          await handleBookMarkEvent({
+            userId: msg.body?.userId,
+            listingId: msg.body?.listingId,
+            operation: msg.body?.operation,
+          });
+
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.error(error);
+          return ConsumerStatus.DROP;
         }
       }
     );
