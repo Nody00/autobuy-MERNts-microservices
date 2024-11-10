@@ -65,6 +65,18 @@ const listingSchema = new Schema({
     default: 1,
     required: true,
   },
+  images: [
+    {
+      url: {
+        type: String,
+        required: true,
+      },
+      publicId: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

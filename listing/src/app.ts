@@ -9,7 +9,8 @@ const BASE_ROUTE = "/listings";
 const app = express();
 
 app.set("trust proxy", true);
-app.use(json());
+app.use(json({ limit: "50mb" }));
+
 app.use(
   cookieSession({
     name: "session",
