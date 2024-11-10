@@ -1,6 +1,6 @@
 import express from "express";
 import { body } from "express-validator";
-import mongoose from "mongoose";
+import { uploadMiddleware } from "../middleware/imageUpload";
 import { CATEGORIES } from "../helpers/categories";
 import { createListingController } from "../controllers/create-listing";
 import { authMiddleware } from "../middleware/auth";
@@ -10,7 +10,18 @@ const router = express.Router();
 router.post(
   "/new-listing",
   authMiddleware,
+  uploadMiddleware,
   [
+    body("images").custom((value, { req }) => {
+      if (!req.files || req.files.length === 0) {
+        throw new Error("At least one image is required!");
+      }
+      if (req.files.length > 5) {
+        throw new Error("Maximum 5 images allowed");
+      }
+      return true;
+    }),
+
     body("manufacturer")
       .isString()
       .withMessage("Manufacturer must be a string.")
@@ -56,7 +67,7 @@ router.post(
 
     body("category")
       .custom((value) => {
-        if (!Object.values(CATEGORIES).includes(value)) {
+        if (!Object.values(CATEGORIES).includes(Number(value))) {
           return false;
         }
 
