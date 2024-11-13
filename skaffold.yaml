@@ -32,6 +32,14 @@ build:
         manual:
           - src: "*.ts"
             dest: .
+    - image: nody00/autobuy-bids
+      context: bids
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
     - image: nody00/autobuy-client
       context: client
       docker:

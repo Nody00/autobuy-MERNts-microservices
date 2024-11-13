@@ -43,3 +43,10 @@ spec:
                 name: query-clusterip-srv
                 port:
                   number: 4003
+          - pathType: Prefix
+            path: "/bids/"
+            backend:
+              service:
+                name: bids-clusterip-srv
+                port:
+                  number: 4004

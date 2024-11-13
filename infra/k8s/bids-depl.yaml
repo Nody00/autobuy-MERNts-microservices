@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bids-depl
+spec:
+  selector:
+    matchLabels:
+      app: bids
+  template:
+    metadata:
+      labels:
+        app: bids
+    spec:
+      # Init container to ensure RabbitMQ is ready
+      initContainers:
+        - name: wait-for-rabbitmq
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z rabbitmq-srv 5672; do echo waiting for rabbitmq; sleep 2; done;",
+            ]
+      containers:
+        - name: bids-depl
+          image: nody00/autobuy-bids
+          ports:
+            - containerPort: 4004
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: jwtSecret
+            - name: COOKIE_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: cookieKey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bids-clusterip-srv
+spec:
+  selector:
+    app: bids
+  ports:
+    - name: bids
+      protocol: TCP
+      port: 4004
+      targetPort: 4004

@@ -65,6 +65,10 @@ router.post(
       .isInt({ min: 1 })
       .withMessage("Price must be a positive integer."),
 
+    body("endBiddingAt")
+      .exists()
+      .withMessage("Must provide a bidding end date"),
+
     body("category")
       .custom((value) => {
         if (!Object.values(CATEGORIES).includes(Number(value))) {
