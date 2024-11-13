@@ -67,7 +67,14 @@ router.post(
 
     body("endBiddingAt")
       .exists()
-      .withMessage("Must provide a bidding end date"),
+      .custom((value) => {
+        const now = new Date();
+        const endAt = new Date(value);
+        return endAt > now;
+      })
+      .withMessage(
+        "Must provide a bidding end date. Date must be in the future!"
+      ),
 
     body("category")
       .custom((value) => {
