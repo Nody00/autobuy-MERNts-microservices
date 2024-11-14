@@ -8,7 +8,7 @@ const start = async () => {
     // connect to mongoose and stuff
   } catch (error) {}
 
-  app.listen(4001, async () => {
+  app.listen(4004, async () => {
     if (!process.env.COOKIE_SESSION_KEY) {
       console.error("COOKIE SESSION KEY MISSING");
       return;

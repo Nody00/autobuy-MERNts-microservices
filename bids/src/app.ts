@@ -1,6 +1,7 @@
 import express from "express";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
+import { createBidRouter } from "./routes/create";
 
 const BASE_ROUTE = "/bids";
 const app = express();
@@ -16,6 +17,8 @@ app.use(
     httpOnly: true, // Prevents client-side JS from accessing the cookies
   })
 );
+
+app.use(BASE_ROUTE, createBidRouter);
 
 app.all("*", async (req, res) => {
   res.status(404).send({ message: "Route not found" });
