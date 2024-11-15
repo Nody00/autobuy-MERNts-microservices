@@ -1,9 +1,16 @@
-import { Connection, Publisher } from "rabbitmq-client";
+import {
+  Connection,
+  Publisher,
+  Consumer,
+  ConsumerStatus,
+} from "rabbitmq-client";
 import { EventEmitter } from "events";
+import { handleListingEvent } from "../event_types/handleListingEvent";
 
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
+  private consumer: Consumer | null = null;
 
   constructor() {
     super(); // Call the parent constructor
@@ -50,6 +57,35 @@ class RabbitMQService extends EventEmitter {
       this.emit("error", error);
       // throw error; // Propagate the error if needed
     }
+  }
+
+  async initilizeListingConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initialized cannot initilize consumer");
+    }
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "listingService-listing-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "listing-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [
+          { exchange: "listing-events", routingKey: "listings.*" },
+        ],
+      },
+      async (msg) => {
+        try {
+          await handleListingEvent(msg);
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.log("Query handler error", error);
+          return ConsumerStatus.DROP;
+        }
+      }
+    );
   }
 
   async sendMessage(

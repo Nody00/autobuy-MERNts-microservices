@@ -20,33 +20,4 @@ export const handleListingEvent = async (msg: AsyncMessage) => {
     console.log("Listing creation successful!");
     return;
   }
-
-  if (event.operation === "update") {
-    console.log("UPDATE event on the BIDDING service", event);
-    if (!existingListing) {
-      throw new Error(`Listing ${event._id} not found for update`);
-    }
-
-    // Version check
-    if (event.version !== existingListing.version + 1) {
-      if (event.version <= existingListing.version) {
-        // Old or duplicate event, acknoledge and ignore
-        console.warn(
-          `Received old version ${event.version} for listing ${event._id}. Current version: ${existingListing.version}`
-        );
-        return;
-      } else {
-        throw new Error(`Version gap detected for listing ${event._id}`);
-      }
-    }
-
-    // Apply update
-    await Listing.findByIdAndUpdate(event._id, {
-      $set: {
-        ...event,
-      },
-    });
-    console.log("Listing update successful!");
-    return;
-  }
 };

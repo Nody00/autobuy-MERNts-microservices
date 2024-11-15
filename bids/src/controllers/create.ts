@@ -67,6 +67,7 @@ export const createBidController = async (
     },
     {
       lean: true,
+      new: true,
     }
   );
 
@@ -75,7 +76,7 @@ export const createBidController = async (
     operation: "create",
     ...newBid,
   });
-
+  console.log("dinov log updatedListing", updatedListing);
   await rabbit.sendMessage("listing-events", "listings.update", {
     operation: "update",
     ...updatedListing,

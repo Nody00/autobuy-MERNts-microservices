@@ -18,6 +18,7 @@ const start = async () => {
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
     await rabbit.initializePublisher();
+    await rabbit.initilizeListingConsumer();
     console.log("Listing service listening on port 4002...");
   });
 };
