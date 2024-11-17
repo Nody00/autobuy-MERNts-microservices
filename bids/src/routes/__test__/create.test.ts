@@ -134,12 +134,34 @@ describe("Create bid tests", () => {
     expect(result.status).toBe(400);
   });
 
+  it("returns 400 status if the bid is smaller or equal to the listing price", async () => {
+    const listing = await createListing({ validBidingTime: true });
+
+    const payloadEqual = {
+      listingId: listing._id,
+      amount: listing.price,
+    };
+
+    const payloadSmaller = {
+      listingId: listing._id,
+      amount: listing.price - 100,
+    };
+
+    const resultEqual = await request(app).post("/bids/new").send(payloadEqual);
+    const resultSmaller = await request(app)
+      .post("/bids/new")
+      .send(payloadSmaller);
+
+    expect(resultEqual.status).toBe(400);
+    expect(resultSmaller.status).toBe(400);
+  });
+
   it("returns 200 status, creates new bid and updates listing if valid data has been sent", async () => {
     const listing = await createListing({ validBidingTime: true });
 
     const payload = {
       listingId: listing._id,
-      amount: 100,
+      amount: listing.price + 1,
     };
 
     await request(app).post("/bids/new").send(payload);
@@ -147,12 +169,12 @@ describe("Create bid tests", () => {
     const foundBid = await Bid.findOne({
       userId: FAKE_USER_ID,
       listingId: listing._id,
-      amount: 100,
+      amount: payload.amount,
     });
 
     const foundListing = await Listing.findById(listing._id);
 
-    expect(foundBid!.amount).toBe(100);
+    expect(foundBid!.amount).toBe(payload.amount);
 
     expect(foundListing?.highestBid).toEqual(foundBid?._id);
   });

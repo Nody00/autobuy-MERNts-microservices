@@ -42,8 +42,18 @@ export const createBidController = async (
   if (listing.highestBid) {
     const highestBid = await Bid.findById(listing.highestBid);
     if (highestBid && amount <= highestBid.amount) {
-      return res.status(400).send({ message: "Invalid bid amount" });
+      return res.status(400).send({
+        message:
+          "Invalid bid amount,bid must be higher than the price and the current highest bid",
+      });
     }
+  }
+
+  if (amount <= listing.price) {
+    return res.status(400).send({
+      message:
+        "Invalid bid amount,amount must be greater than the listing price",
+    });
   }
 
   // create bid
