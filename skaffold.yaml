@@ -40,6 +40,14 @@ build:
         manual:
           - src: "*.ts"
             dest: .
+    - image: nody00/autobuy-notification
+      context: notifications
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.ts"
+            dest: .
     - image: nody00/autobuy-client
       context: client
       docker:

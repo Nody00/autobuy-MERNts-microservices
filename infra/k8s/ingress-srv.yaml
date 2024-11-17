@@ -50,3 +50,10 @@ spec:
                 name: bids-clusterip-srv
                 port:
                   number: 4004
+          - pathType: Prefix
+            path: "/notification/"
+            backend:
+              service:
+                name: notification-clusterip-srv
+                port:
+                  number: 4004
