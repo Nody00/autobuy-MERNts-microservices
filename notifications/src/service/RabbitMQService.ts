@@ -5,7 +5,10 @@ import {
   ConsumerStatus,
 } from "rabbitmq-client";
 import { EventEmitter } from "events";
-
+import { notificationService } from "./NotificationService";
+import { handleListingEvent } from "../events/handleListingEvent";
+import { handleUserEvent } from "../events/handleUserEvent";
+import { handleBidEvent } from "../events/handleBidEvents";
 class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
@@ -35,57 +38,89 @@ class RabbitMQService extends EventEmitter {
     }
   }
 
-  // async initializePublisher(): Promise<void> {
-  //   try {
-  //     if (!this.connection) {
-  //       throw new Error("Connection not initialized cannot create publisher!");
-  //     }
+  async initilizeNewListingConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initialized cannot initilize consumer");
+    }
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "notifications-listing-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "listing-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [
+          { exchange: "listing-events", routingKey: "listings.*" },
+        ],
+      },
+      async (msg) => {
+        try {
+          await handleListingEvent(msg);
+          notificationService.handleNewListing(msg.body);
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.log("Query handler error", error);
+          return ConsumerStatus.DROP;
+        }
+      }
+    );
+  }
 
-  //     this.publisher = this.connection?.createPublisher({
-  //       // Enable publish confirmations, similar to consumer acknowledgements
-  //       confirm: true,
-  //       // Enable retries
-  //       maxAttempts: 10,
-  //       // Optionally ensure the existence of an exchange before we use it
-  //       exchanges: [{ exchange: "bids-events", type: "topic" }],
-  //     });
-  //   } catch (error) {
-  //     console.error("Failed to initialize publisher:", error);
+  async initilizeUserEventConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initialized cannot initilize consumer");
+    }
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "notifications-user-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "auth-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [{ exchange: "auth-events", routingKey: "users.*" }],
+      },
+      async (msg) => {
+        try {
+          await handleUserEvent(msg.body);
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          return ConsumerStatus.DROP;
+        }
+      }
+    );
+  }
 
-  //     // Emit an error event
-  //     this.emit("error", error);
-  //     // throw error; // Propagate the error if needed
-  //   }
-  // }
+  async initilizeNewBidsConsumer(): Promise<void> {
+    if (!this.connection) {
+      throw new Error("Connection not initialized cannot initilize consumer");
+    }
+    this.consumer = this.connection.createConsumer(
+      {
+        queue: "notifications-bids-events-queue",
+        queueOptions: { durable: true },
+        // handle 2 messages at a time
+        qos: { prefetchCount: 2 },
+        // Optionally ensure an exchange exists
+        exchanges: [{ exchange: "bids-events", type: "topic" }],
+        // With a "topic" exchange, messages matching this pattern are routed to the queue
+        queueBindings: [{ exchange: "bids-events", routingKey: "bids.*" }],
+      },
+      async (msg) => {
+        try {
+          await handleBidEvent(msg);
 
-  // async initilizeNewListingConsumer(): Promise<void> {
-  //   if (!this.connection) {
-  //     throw new Error("Connection not initialized cannot initilize consumer");
-  //   }
-  //   this.consumer = this.connection.createConsumer(
-  //     {
-  //       queue: "bids-listing-events-queue",
-  //       queueOptions: { durable: true },
-  //       // handle 2 messages at a time
-  //       qos: { prefetchCount: 2 },
-  //       // Optionally ensure an exchange exists
-  //       exchanges: [{ exchange: "listing-events", type: "topic" }],
-  //       // With a "topic" exchange, messages matching this pattern are routed to the queue
-  //       queueBindings: [
-  //         { exchange: "listing-events", routingKey: "listings.*" },
-  //       ],
-  //     },
-  //     async (msg) => {
-  //       try {
-  //         await handleListingEvent(msg);
-  //         return ConsumerStatus.ACK;
-  //       } catch (error) {
-  //         console.log("Query handler error", error);
-  //         return ConsumerStatus.DROP;
-  //       }
-  //     }
-  //   );
-  // }
+          return ConsumerStatus.ACK;
+        } catch (error) {
+          console.log("Notification handler error", error);
+          return ConsumerStatus.DROP;
+        }
+      }
+    );
+  }
 
   async sendMessage(
     exchange: string,

@@ -21,8 +21,10 @@ const start = async () => {
     await mongoose.connect("mongodb://notification-mongo-srv:27017");
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
-    // await rabbit.initializePublisher();
-    // await rabbit.initilizeNewListingConsumer();
+
+    await rabbit.initilizeNewListingConsumer();
+    await rabbit.initilizeNewBidsConsumer();
+    await rabbit.initilizeUserEventConsumer();
 
     console.log("notification listening on port 4005...");
   });

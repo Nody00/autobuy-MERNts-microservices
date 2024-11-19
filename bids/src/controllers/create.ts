@@ -81,12 +81,14 @@ export const createBidController = async (
     }
   );
 
-  // send rabbitmq messages for both event
+  const createdBid = await Bid.findById(newBid._id);
+
+  // send rabbitmq messages for both events
   await rabbit.sendMessage("bids-events", "bids.new", {
     operation: "create",
-    ...newBid,
+    ...createdBid?.toObject(),
   });
-  console.log("dinov log updatedListing", updatedListing);
+
   await rabbit.sendMessage("listing-events", "listings.update", {
     operation: "update",
     ...updatedListing,
