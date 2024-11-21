@@ -48,7 +48,6 @@ describe("Saving listing", () => {
     const fakeListingId = new mongoose.Types.ObjectId();
     const response = await request(app).post(`/listings/save/${fakeListingId}`);
 
-    //   console.log("dinov log response", response);
     expect(response.status).toBe(404);
   });
 

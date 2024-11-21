@@ -71,6 +71,7 @@ const listingSchema = new Schema({
   },
   highestBid: {
     type: Types.ObjectId,
+    ref: "Bid",
   },
   images: [
     {

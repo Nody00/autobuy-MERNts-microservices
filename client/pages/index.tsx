@@ -5,8 +5,6 @@ const LandingPage = () => {
   const fetchListings = async () => {
     try {
       const { data } = await axios.get("https://autobuy.dev/listings/get");
-
-      console.log("dinov log data", data);
     } catch (error) {}
   };
 

@@ -2,6 +2,7 @@ import Bull from "bull";
 import { Notification } from "../models/Notification";
 import { Bid } from "../models/Bid";
 import { Listing } from "../models/Listing";
+import { emailService } from "./EmailService";
 
 class NotificationService {
   private notificationQueue: Bull.Queue;
@@ -51,7 +52,7 @@ class NotificationService {
         { listing },
         {
           jobId: `listing-${listing._id}`,
-          delay: 20000,
+          delay: delay,
           attempts: 3,
         }
       );
@@ -76,7 +77,22 @@ class NotificationService {
       }
       const foundBid = await Bid.findById(foundListing.highestBid);
       if (!foundBid) {
-        console.error("No bid found!");
+        const notification = await Notification.create({
+          listingId: foundListing._id,
+          type: "BID_END_NO_BIDS",
+          title: "Auction ended",
+          message: "Auction ended",
+        });
+
+        await notification.save();
+        // await emailService.sendBidEndNotification(
+        //   foundListing._id.toString(),
+        //   foundListing.userId.toString(),
+        //   undefined,
+        //   "BID_END",
+        //   "Auction ended",
+        //   true
+        // );
         return;
       }
 
@@ -90,6 +106,15 @@ class NotificationService {
       });
 
       await notification.save();
+
+      // await emailService.sendBidEndNotification(
+      //   foundListing._id.toString(),
+      //   foundListing.userId.toString(),
+      //   foundBid.userId.toString(),
+      //   "BID_END",
+      //   "Auction ended",
+      //   false
+      // );
 
       // Send Email
     } catch (error) {}
