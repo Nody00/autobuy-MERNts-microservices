@@ -53,6 +53,8 @@ export const signUpController = async (
     phoneNumber,
     role: userRole._id,
     version: 1,
+    ...(isAdmin && { isAdmin: true, isCustomer: false }),
+    ...(!isAdmin && { isCustomer: true, isAdmin: false }),
   };
 
   try {

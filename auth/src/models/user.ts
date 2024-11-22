@@ -44,9 +44,11 @@ const userSchema = new Schema({
   },
   isAdmin: {
     type: Boolean,
+    required: true,
   },
   isCustomer: {
     type: Boolean,
+    required: true,
   },
   role: {
     type: Schema.Types.ObjectId,

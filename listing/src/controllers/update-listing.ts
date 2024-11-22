@@ -23,6 +23,8 @@ export const updateListingController = async (
   res: Response
 ) => {
   const { listingId } = req.params;
+  // @ts-ignore
+  const { id, isCustomer } = req.user;
 
   if (!mongoose.Types.ObjectId.isValid(listingId)) {
     return res.status(400).send({ message: "Invalid id!" });
@@ -44,6 +46,10 @@ export const updateListingController = async (
 
     if (!foundListing) {
       return res.status(404).send({ message: "Listing not found!" });
+    }
+
+    if (isCustomer && id !== foundListing.userId) {
+      return res.status(403).send({ message: "Access Denied!" });
     }
 
     await Listing.updateOne(
