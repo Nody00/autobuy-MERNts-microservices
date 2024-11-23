@@ -7,7 +7,6 @@ export const handleBidEvent = async (msg: AsyncMessage) => {
   const existingBid = await Bid.findById(event._id);
 
   if (event.operation === "create") {
-    console.log("CREATE event on the QUERY service", event);
     // Check if Bid already exists
     if (existingBid) {
       console.warn(`Bid ${event._id} already exists!`);

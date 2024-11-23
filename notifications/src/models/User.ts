@@ -41,27 +41,20 @@ const userSchema = new Schema({
   },
   version: {
     type: Number,
+    required: true,
   },
   isAdmin: {
     type: Boolean,
+    required: true,
   },
   isCustomer: {
     type: Boolean,
+    required: true,
   },
   role: {
     type: Schema.Types.ObjectId,
     ref: "Role",
     // required: true,
-  },
-});
-
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ phoneNumber: 1 }, { unique: true });
-
-userSchema.set("toJSON", {
-  transform: (doc, ret) => {
-    delete ret.password;
-    return ret;
   },
 });
 

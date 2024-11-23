@@ -54,7 +54,7 @@ class RabbitMQService extends EventEmitter {
       },
       async (msg) => {
         try {
-          await handleUserEvent(msg.body);
+          await handleUserEvent(msg);
           return ConsumerStatus.ACK;
         } catch (error) {
           return ConsumerStatus.DROP;

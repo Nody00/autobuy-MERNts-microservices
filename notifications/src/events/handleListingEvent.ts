@@ -6,7 +6,6 @@ export const handleListingEvent = async (msg: AsyncMessage) => {
   const existingListing = await Listing.findById(event._id);
 
   if (event.operation === "create") {
-    console.log("CREATE event on the QUERY service", event);
     // Check if listing already exists
     if (existingListing) {
       console.warn(`Listing ${event._id} already exists!`);

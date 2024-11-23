@@ -21,11 +21,21 @@ spec:
               "-c",
               "until nc -z rabbitmq-srv 5672; do echo waiting for rabbitmq; sleep 2; done;",
             ]
+          resources:
+            limits:
+              memory: "64Mi"
+            requests:
+              memory: "32Mi"
       containers:
         - name: bids-depl
           image: nody00/autobuy-bids
           ports:
             - containerPort: 4004
+          resources:
+            limits:
+              memory: "500Mi"
+            requests:
+              memory: "300Mi"
           env:
             - name: JWT_SECRET
               valueFrom:
