@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { User } from "../models/user";
+import { rabbit } from "../service/RabbitMQService";
 
 interface RequestBody {
   email: string | undefined;
@@ -61,9 +62,21 @@ export const updateUserController = async (
       userData.recoveryPhoneNumber = recoveryPhoneNumber;
     }
 
-    await User.findByIdAndUpdate(id, {
-      $set: { ...userData },
-      $inc: { version: 1 },
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: { ...userData },
+        $inc: { version: 1 },
+      },
+      {
+        new: true,
+        lean: true,
+      }
+    );
+
+    rabbit.sendMessage("auth-events", "users.update", {
+      ...updatedUser,
+      operation: "update",
     });
 
     return res.status(200).send({ message: "User updated!" });

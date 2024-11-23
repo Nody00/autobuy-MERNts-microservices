@@ -9,7 +9,7 @@ export const handleListingEvent = async (msg: AsyncMessage) => {
     console.log("CREATE event on the QUERY service", event);
     // Check if listing already exists
     if (existingListing) {
-      console.warn(`Listing ${event._id} already exists!`);
+      console.error(`Listing ${event._id} already exists!`);
       throw new Error(`Listing ${event._id} already exists!`);
     }
 
@@ -30,8 +30,8 @@ export const handleListingEvent = async (msg: AsyncMessage) => {
     // Version check
     if (event.version !== existingListing.version + 1) {
       if (event.version <= existingListing.version) {
-        // Old or duplicate event, acknoledge and ignore
-        console.warn(
+        // Old or duplicate event, acknowladge and ignore
+        console.error(
           `Received old version ${event.version} for listing ${event._id}. Current version: ${existingListing.version}`
         );
         return;

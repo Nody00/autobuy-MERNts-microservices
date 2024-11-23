@@ -41,12 +41,15 @@ const userSchema = new Schema({
   },
   version: {
     type: Number,
+    required: true,
   },
   isAdmin: {
     type: Boolean,
+    required: true,
   },
   isCustomer: {
     type: Boolean,
+    required: true,
   },
   role: {
     type: Schema.Types.ObjectId,
@@ -54,7 +57,6 @@ const userSchema = new Schema({
     // required: true,
   },
 });
-
 userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ phoneNumber: 1 }, { unique: true });
 

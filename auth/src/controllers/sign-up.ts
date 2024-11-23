@@ -63,7 +63,7 @@ export const signUpController = async (
 
     // send a message to the query service
     rabbit.sendMessage("auth-events", "users.new", {
-      data: result,
+      ...result.toObject(),
       operation: "create",
     });
     return res.status(201).send({ message: "User created", data: result });
