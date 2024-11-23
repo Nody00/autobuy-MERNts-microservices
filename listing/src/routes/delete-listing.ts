@@ -10,7 +10,6 @@ router.delete(
   permissionMiddleware("delete", "listings"),
   // @ts-ignore
   // I need to figure out how to define the ts types for the params correctly and not brake everything
-  // thats a job for future Dino
   // @ts-ignore
   deleteListingController
 );

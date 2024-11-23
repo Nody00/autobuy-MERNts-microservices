@@ -64,7 +64,6 @@ export const signUpController = async (
     const foundUser = await User.findById(result._id);
 
     // send a message to the query service
-    console.log("dinov log created foundUser", foundUser);
     rabbit.sendMessage("auth-events", "users.new", {
       ...foundUser?.toObject(),
       operation: "create",
