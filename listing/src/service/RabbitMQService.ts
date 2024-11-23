@@ -11,6 +11,10 @@ class RabbitMQService extends EventEmitter {
   private connection: Connection | null = null;
   private publisher: Publisher | null = null;
   private consumer: Consumer | null = null;
+  private connectionUrl: string = "";
+  private reconnectAttempts: number = 0;
+  private readonly maxReconnectAttempts: number = 10;
+  private readonly reconnectInterval: number = 5000;
 
   constructor() {
     super(); // Call the parent constructor
@@ -18,21 +22,77 @@ class RabbitMQService extends EventEmitter {
 
   // Connect to RabbitMQ
   async connect(url: string): Promise<void> {
+    this.connectionUrl = url;
+    await this.attemptConnection();
+  }
+
+  private async attemptConnection(): Promise<void> {
     try {
-      this.connection = new Connection(url);
+      this.connection = new Connection(this.connectionUrl);
 
-      // Wait for the connection to be established
-      // Ensure this method exists in your library
+      // Setup connection event listeners
+      this.connection.on("error", async (error) => {
+        console.error("RabbitMQ connection error:", error);
+        await this.handleDisconnect();
+      });
+
+      this.connection.on("connection.blocked", async () => {
+        console.log("RabbitMQ connection closed");
+        await this.handleDisconnect();
+      });
+
       console.log("Connected to RabbitMQ");
-
-      // Emit a connection event
+      this.reconnectAttempts = 0;
       this.emit("connection");
+
+      // Initialize publisher and consumer after successful connection
+      await this.initializePublisher();
+      await this.initilizeListingConsumer();
     } catch (error) {
       console.error("Failed to connect to RabbitMQ:", error);
+      await this.handleDisconnect();
+    }
+  }
 
-      // Emit an error event
-      this.emit("error", error);
-      // throw error; // Propagate the error if needed
+  private async handleDisconnect(): Promise<void> {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error("Max reconnection attempts reached");
+      this.emit(
+        "error",
+        new Error("Failede to reconnect after maximum attempts")
+      );
+      return;
+    }
+
+    this.reconnectAttempts++;
+    console.log(
+      `Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`
+    );
+
+    // Clean up existing connections
+    await this.cleanup();
+
+    // Wait for the reconnect interval
+    await new Promise((resolve) => setTimeout(resolve, this.reconnectInterval));
+    await this.attemptConnection();
+  }
+
+  private async cleanup(): Promise<void> {
+    try {
+      if (this.consumer) {
+        await this.consumer.close();
+        this.consumer = null;
+      }
+      if (this.publisher) {
+        await this.publisher.close();
+        this.publisher = null;
+      }
+      if (this.connection) {
+        await this.connection.close();
+        this.connection = null;
+      }
+    } catch (error) {
+      console.error("Error during cleanup:", error);
     }
   }
 

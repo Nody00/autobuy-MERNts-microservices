@@ -21,8 +21,6 @@ const start = async () => {
     await mongoose.connect("mongodb://bids-mongo-srv:27017");
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
-    await rabbit.initializePublisher();
-    await rabbit.initilizeNewListingConsumer();
 
     console.log("Bids listening on port 4004...");
   });

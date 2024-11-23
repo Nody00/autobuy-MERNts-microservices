@@ -29,8 +29,7 @@ const start = async () => {
     await InitializeRoles();
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
-    await rabbit.initializePublisher();
-    await rabbit.initilizeListingBookmarkConsumer();
+
     console.log("Auth service V2 listening on port 4001...");
   });
 };

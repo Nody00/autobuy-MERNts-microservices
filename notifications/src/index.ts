@@ -22,10 +22,6 @@ const start = async () => {
 
     await rabbit.connect("amqp://admin:password@rabbitmq-srv:5672");
 
-    await rabbit.initilizeNewListingConsumer();
-    await rabbit.initilizeNewBidsConsumer();
-    await rabbit.initilizeUserEventConsumer();
-
     console.log("notification listening on port 4005...");
   });
 };
