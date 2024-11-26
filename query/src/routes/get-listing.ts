@@ -3,11 +3,13 @@ import { query } from "express-validator";
 import { getListingController } from "../controllers/get-listing";
 import { CATEGORIES } from "../helpers/categories";
 import { authMiddleware } from "../middleware/auth";
+import { permissionMiddleware } from "../middleware/permissionMiddleware";
 const router = express.Router();
 
 router.get(
   "/listing",
   authMiddleware,
+  permissionMiddleware("read", "listings"),
   [
     query("manufacturer")
       .optional()

@@ -39,6 +39,7 @@ const listingSchema = new Schema({
   },
   views: {
     type: Number, // Number of views on the listing
+    default: 0,
   },
   saves: {
     type: [Types.ObjectId], // Users who saved/bookmarked the listing
