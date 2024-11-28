@@ -34,7 +34,8 @@ const userSchema = new Schema({
     type: Boolean,
   },
   saves: {
-    type: [Types.ObjectId], // ids of listings the user saved(bookmarked)
+    type: [Schema.Types.ObjectId], // ids of listings the user saved(bookmarked)
+    ref: "Listing",
   },
   deleted: {
     type: Boolean,
