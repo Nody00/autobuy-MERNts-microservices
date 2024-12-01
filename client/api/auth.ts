@@ -45,5 +45,6 @@ export const authAPI = Object.freeze({
   },
   updateUser: async (id: string, payload: updateUserPayload) => {
     const { data } = await axios.patch(`/auth/users/${id}`, payload);
+    return data;
   },
 });
