@@ -68,6 +68,10 @@ export const signInController = async (
       firstName: fetchedUser.firstName,
       lastName: fetchedUser.lastName,
       phoneNumber: fetchedUser.phoneNumber,
+      ...(fetchedUser.isAdmin && { isAdmin: true }),
+      ...(fetchedUser.isCustomer && { isCustomer: true }),
+      // @ts-ignore
+      permissions: fetchedUser.role.permissions,
     },
   });
 };
