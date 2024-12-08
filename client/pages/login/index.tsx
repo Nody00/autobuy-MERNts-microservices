@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import styles from "./login.module.css";
 import { authAPI } from "@/api/auth";
-
+import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "next/navigation";
 export default function login() {
+  const { setUser } = useAuthStore();
+  const router = useRouter();
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -13,15 +16,22 @@ export default function login() {
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
+
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
     try {
       const res = await authAPI.signIn({
         email: values.email,
         password: values.password,
       });
+      setUser(res.user);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCreateAccount = (e: SyntheticEvent) => {
+    e.preventDefault();
+    router.push("/signup");
   };
 
   return (
@@ -78,7 +88,12 @@ export default function login() {
               </button>
 
               {/* <p className={styles.text}>No account?</p> */}
-              <button disabled={isSubmitting} className={styles.signUpButton}>
+              <button
+                disabled={isSubmitting}
+                className={styles.signUpButton}
+                onClick={handleCreateAccount}
+                type="button"
+              >
                 Create account
               </button>
             </Form>

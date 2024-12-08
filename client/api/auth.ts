@@ -6,7 +6,7 @@ interface signUpPayload {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  isAdmin: string;
+  isAdmin: boolean;
 }
 
 interface signInPayload {

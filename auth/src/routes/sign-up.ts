@@ -33,7 +33,6 @@ router.post(
       .exists()
       .isString()
       .trim()
-      .isMobilePhone("any")
       .withMessage("You must provide a valid phone number"),
     body("isAdmin")
       .exists()
