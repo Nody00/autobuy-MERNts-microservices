@@ -29,7 +29,7 @@ export class TokenHelper {
 
   static async generateRefreshToken(userId: string) {
     const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, {
-      expiresIn: "14d",
+      expiresIn: "7d",
     });
 
     const expiresAt = new Date();
