@@ -23,13 +23,13 @@ export class TokenHelper {
         permissions: user.permissions,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "15m" } // Short lived token
+      { expiresIn: "1d" } // Short lived token
     );
   }
 
   static async generateRefreshToken(userId: string) {
     const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, {
-      expiresIn: "7d",
+      expiresIn: "14d",
     });
 
     const expiresAt = new Date();
