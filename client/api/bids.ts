@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/config/axiosConfig";
 
 interface newBidPayload {
   listingId: string;
@@ -7,7 +7,7 @@ interface newBidPayload {
 
 export const bidsAPI = Object.freeze({
   createBid: async (payload: newBidPayload) => {
-    const { data } = await axios.post("/bids/new", payload);
+    const { data } = await axiosInstance.post("/bids/new", payload);
     return data;
   },
 });

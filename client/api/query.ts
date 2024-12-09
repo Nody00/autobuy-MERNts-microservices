@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/config/axiosConfig";
 
 interface GetListingParams {
   manufacturer?: string;
@@ -37,23 +37,23 @@ interface GetUsersParams {
 
 export const queryAPI = Object.freeze({
   getListings: async (params: GetListingParams) => {
-    const { data } = await axios.get("/query/listing", {
+    const { data } = await axiosInstance.get("/query/listing", {
       params: params,
     });
     return data;
   },
   getOneListing: async (id: string) => {
-    const { data } = await axios.get(`/query/listing/${id}`);
+    const { data } = await axiosInstance.get(`/query/listing/${id}`);
     return data;
   },
   getUsers: async (params: GetUsersParams) => {
-    const { data } = await axios.get(`/query/users`, {
+    const { data } = await axiosInstance.get(`/query/users`, {
       params: params,
     });
     return data;
   },
   getOneUser: async (id: string) => {
-    const { data } = await axios.get(`/query/users/${id}`);
+    const { data } = await axiosInstance.get(`/query/users/${id}`);
     return data;
   },
 });

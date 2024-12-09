@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/config/axiosConfig";
 
 interface signUpPayload {
   email: string;
@@ -24,27 +24,29 @@ interface updateUserPayload {
 
 export const authAPI = Object.freeze({
   signUp: async (payload: signUpPayload) => {
-    const { data } = await axios.post("/auth/users/sign-up", payload);
+    const { data } = await axiosInstance.post("/auth/users/sign-up", payload);
     return data;
   },
   signIn: async (payload: signInPayload) => {
-    const { data } = await axios.post("/auth/users/sign-in", payload);
+    const { data } = await axiosInstance.post("/auth/users/sign-in", payload);
     return data;
   },
   signOut: async () => {
-    const { data } = await axios.post("/auth/sign-out");
+    const { data } = await axiosInstance.post("/auth/sign-out");
     return data;
   },
   refreshToken: async () => {
-    const { data } = await axios.post("/auth/refresh-token");
+    const { data } = await axiosInstance.post("/auth/refresh-token");
     return data;
   },
   deleteUser: async (id: string) => {
-    const { data } = await axios.delete(`/auth/users/delete-user/${id}`);
+    const { data } = await axiosInstance.delete(
+      `/auth/users/delete-user/${id}`
+    );
     return data;
   },
   updateUser: async (id: string, payload: updateUserPayload) => {
-    const { data } = await axios.patch(`/auth/users/${id}`, payload);
+    const { data } = await axiosInstance.patch(`/auth/users/${id}`, payload);
     return data;
   },
 });

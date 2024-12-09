@@ -24,6 +24,7 @@ export default function login() {
         password: values.password,
       });
       setUser(res.user);
+      router.push("/home");
     } catch (error) {
       console.error(error);
     }
