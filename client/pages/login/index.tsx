@@ -5,17 +5,24 @@ import styles from "./login.module.css";
 import { authAPI } from "@/api/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+});
+
 export default function login() {
   const { setUser } = useAuthStore();
   const router = useRouter();
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
-  });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
     try {
@@ -72,12 +79,15 @@ export default function login() {
                 <Field
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className={styles.input}
                 ></Field>
                 {errors.password && touched.password && (
                   <div className={styles.error}>{errors.password}</div>
                 )}
+                <p className={styles.text} onClick={handleShowPassword}>
+                  {showPassword ? "Hide password" : "Show password"}
+                </p>
               </div>
 
               <button

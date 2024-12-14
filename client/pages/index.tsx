@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
+
+import styles from "./mainPage.module.css";
+
 const LandingPage = () => {
   const user = useAuthStore((state) => state.user);
   const router = useRouter();
@@ -11,7 +14,7 @@ const LandingPage = () => {
     }
   }, [user]);
 
-  return <div>MAIN PAGE</div>;
+  return <div className={styles.container}></div>;
 };
 
 export default LandingPage;
