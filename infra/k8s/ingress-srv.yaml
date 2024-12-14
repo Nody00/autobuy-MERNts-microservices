@@ -9,8 +9,13 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "180" # Increase timeouts for larger uploads
     nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - autobuy.dev
+      secretName: autobuy-tls
   rules:
     - host: autobuy.dev
       http:
