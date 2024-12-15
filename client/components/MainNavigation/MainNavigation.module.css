@@ -6,8 +6,25 @@
   border-radius: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   padding: 8px;
   gap: 4px;
+  min-width: 50px;
+}
+
+.linkButton {
+  height: 48px;
+  width: 48px;
+  background-color: #fff;
+  border-radius: 8px;
+  transition: all 0.2s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.linkButton:hover {
+  background-color: #f4f4f5;
 }
