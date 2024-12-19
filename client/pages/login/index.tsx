@@ -37,7 +37,7 @@ export default function login() {
         password: values.password,
       });
       setUser(res.user);
-      router.push("/home");
+      router.push("/listings");
     } catch (error: unknown) {
       if (isAxiosError<errorType>(error)) {
         // handle different backend error types

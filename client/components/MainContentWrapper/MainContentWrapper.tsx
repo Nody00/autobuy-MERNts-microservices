@@ -1,9 +1,6 @@
 import styles from "./MainContentWrapper.module.css";
 import { ListingsFilter } from "../ListingsFilter/ListingsFilter";
-export const MainContentWrapper = () => {
-  return (
-    <div className={styles.container}>
-      <ListingsFilter />
-    </div>
-  );
+import { ReactNode } from "react";
+export const MainContentWrapper = ({ children }: { children: ReactNode }) => {
+  return <div className={styles.container}>{children}</div>;
 };

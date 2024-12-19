@@ -6,7 +6,9 @@ import { HeartIcon } from "@/icons/HeartIcon";
 import { PlusCircleIcon } from "@/icons/PlusCircleIcon";
 import { UserIcon } from "@/icons/UserIcon";
 import { UsersIcon } from "@/icons/UsersIcon";
+import { usePathname } from "next/navigation";
 export const MainNavigation = () => {
+  const pathname = usePathname();
   return (
     <div className={styles.container}>
       <Link
@@ -17,7 +19,13 @@ export const MainNavigation = () => {
         <PlusCircleIcon size="24px" />
       </Link>
 
-      <Link href={"/listings"} className={styles.linkButton} title="Listings">
+      <Link
+        href={"/listings"}
+        className={`${styles.linkButton} ${
+          pathname === "/listings" ? styles.activeButton : ""
+        }`}
+        title="Listings"
+      >
         <CarSideIcon size="24px" />
       </Link>
 

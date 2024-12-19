@@ -28,3 +28,7 @@
 .linkButton:hover {
   background-color: #f4f4f5;
 }
+
+.activeButton {
+  background-color: #f4f4f5 !important;
+}
