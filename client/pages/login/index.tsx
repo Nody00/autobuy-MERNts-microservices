@@ -5,7 +5,11 @@ import styles from "./login.module.css";
 import { authAPI } from "@/api/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
-
+import axios, { AxiosError } from "axios";
+import isAxiosError from "@/helpers/typedErrorChecker";
+type errorType = {
+  status: number;
+};
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -19,6 +23,7 @@ export default function login() {
   const { setUser } = useAuthStore();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [errorState, setErrorState] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -26,13 +31,22 @@ export default function login() {
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
     try {
+      setErrorState(false);
       const res = await authAPI.signIn({
         email: values.email,
         password: values.password,
       });
       setUser(res.user);
       router.push("/home");
-    } catch (error) {
+    } catch (error: unknown) {
+      if (isAxiosError<errorType>(error)) {
+        // handle different backend error types
+        if (error.status === 400) {
+          setErrorState(true);
+        }
+      }
+
+      // handle other errors
       console.error(error);
     }
   };
@@ -97,6 +111,9 @@ export default function login() {
               >
                 {isSubmitting ? "Signing in..." : "Sign in"}
               </button>
+              {errorState && (
+                <div className={styles.error}>Wrong Email or password</div>
+              )}
 
               {/* <p className={styles.text}>No account?</p> */}
               <button
