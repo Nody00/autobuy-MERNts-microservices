@@ -3,4 +3,8 @@
   grid-row: 2/-1;
   grid-column: 2/-1;
   border-radius: 10px;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
