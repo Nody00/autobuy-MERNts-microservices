@@ -13,7 +13,9 @@ export const MainNavigation = () => {
     <div className={styles.container}>
       <Link
         href={"/new-listing"}
-        className={styles.linkButton}
+        className={`${styles.linkButton} ${
+          pathname === "/new-listing" ? styles.activeButton : ""
+        }`}
         title="New Listing"
       >
         <PlusCircleIcon size="24px" />
@@ -31,7 +33,9 @@ export const MainNavigation = () => {
 
       <Link
         href={"/saved"}
-        className={styles.linkButton}
+        className={`${styles.linkButton} ${
+          pathname === "/saved" ? styles.activeButton : ""
+        }`}
         title="Saved Listings"
       >
         <HeartIcon size="24px" />
@@ -39,17 +43,31 @@ export const MainNavigation = () => {
 
       <Link
         href={"/my-profile"}
-        className={styles.linkButton}
+        className={`${styles.linkButton} ${
+          pathname === "/my-profile" ? styles.activeButton : ""
+        }`}
         title="My Profile"
       >
         <UserIcon size="24px" />
       </Link>
 
-      <Link href={"/users"} className={styles.linkButton} title="Manage Users">
+      <Link
+        href={"/users"}
+        className={`${styles.linkButton} ${
+          pathname === "/users" ? styles.activeButton : ""
+        }`}
+        title="Manage Users"
+      >
         <UsersIcon size="24px" />
       </Link>
 
-      <Link href={"/settings"} className={styles.linkButton} title="Settings">
+      <Link
+        href={"/settings"}
+        className={`${styles.linkButton} ${
+          pathname === "/settings" ? styles.activeButton : ""
+        }`}
+        title="Settings"
+      >
         <SettingsIcon size="24px" />
       </Link>
     </div>
