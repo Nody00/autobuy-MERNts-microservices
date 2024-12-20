@@ -4,4 +4,41 @@
   grid-column: 2;
   border-radius: 10px;
   min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px;
+}
+
+.iconAndMailBox {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.iconAndMailBox p {
+  font-size: 12px;
+}
+
+.searchInput {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #f4f4f5;
+  border-radius: 8px;
+  padding: 4px;
+  transition: all 0.2s ease-out;
+}
+
+.searchInput:hover {
+  border: 1px solid #222fc3;
+}
+
+.searchInput input {
+  border: none;
+  outline: none;
 }
