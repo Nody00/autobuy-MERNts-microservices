@@ -26,8 +26,16 @@ interface updateListingPayload {
 }
 
 export const listingAPI = Object.freeze({
-  create: async (payload: createListingPayload) => {
-    const { data } = await axiosInstance.post("/listings/new-listing", payload);
+  create: async (payload: any) => {
+    const { data } = await axiosInstance.post(
+      "/listings/new-listing",
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Explicitly setting Content-Type
+        },
+      }
+    );
     return data;
   },
   delete: async (id: string) => {

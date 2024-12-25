@@ -2,7 +2,7 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import { cloudinary } from "../config/cloudinary";
 
-const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
+const FILE_SIZE_LIMIT = 20 * 1024 * 1024;
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -17,7 +17,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: FILE_SIZE_LIMIT, // 5MB limit
+    fileSize: FILE_SIZE_LIMIT, // 20MB limit
     files: 5, // Maximum 5 files
   },
   fileFilter: (req, file, cb) => {

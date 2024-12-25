@@ -21,6 +21,7 @@
   flex-direction: column;
   padding: 16px;
   gap: 10px;
+  min-width: 25rem;
 
   -webkit-box-shadow: 4px 10px 16px 0px rgba(0, 0, 0, 0.19);
   -moz-box-shadow: 4px 10px 16px 0px rgba(0, 0, 0, 0.19);
@@ -48,6 +49,7 @@
   border-radius: 4px;
   padding: 4px;
   background-color: #fff;
+  width: 100%;
 }
 
 .input:hover,

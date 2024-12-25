@@ -41,6 +41,8 @@ export const refreshTokenController = async (req: Request, res: Response) => {
       firstName: user.firstName,
       lastName: user.lastName,
       phoneNumber: user.phoneNumber,
+      ...(user.isAdmin && { isAdmin: true }),
+      ...(user.isCustomer && { isCustomer: true }),
       // @ts-ignore
       permissions: user.role.permissions,
     });
@@ -51,7 +53,20 @@ export const refreshTokenController = async (req: Request, res: Response) => {
       jwt: accessToken,
     };
 
-    return res.status(200).json({ message: "Token refreshed successfully" });
+    return res.status(200).json({
+      message: "Token refreshed successfully",
+      user: {
+        _id: user._id.toString(),
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        ...(user.isAdmin && { isAdmin: true }),
+        ...(user.isCustomer && { isCustomer: true }),
+        // @ts-ignore
+        permissions: user.role.permissions,
+      },
+    });
   } catch (error) {
     return res.status(401).json({ message: "Invalid refresh token" });
   }

@@ -93,64 +93,6 @@ class AxiosService {
         return Promise.reject(error);
       }
     );
-
-    // Response interceptor
-    this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse): AxiosResponse => response,
-      async (error: AxiosError): Promise<any> => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & {
-          _retry?: boolean;
-        };
-
-        if (
-          !error.response ||
-          error.response.status !== 401 ||
-          originalRequest._retry
-        ) {
-          return Promise.reject(error);
-        }
-
-        if (this.isRefreshing) {
-          return new Promise((resolve, reject) => {
-            this.failedQueue.push({ resolve, reject });
-          })
-            .then((token) => {
-              if (originalRequest.headers && typeof token === "string") {
-                originalRequest.headers.Authorization = `Bearer ${token}`;
-              }
-              return this.axiosInstance(originalRequest);
-            })
-            .catch((err) => Promise.reject(err));
-        }
-
-        originalRequest._retry = true;
-        this.isRefreshing = true;
-
-        try {
-          const response = await axios.post<RefreshTokenResponse>(
-            `https://autobuy.dev/auth/refresh-token`
-          );
-          const { jwt: newAccessToken, refreshToken: newRefreshToken } =
-            response.data;
-
-          this.setAuthTokens(newAccessToken, newRefreshToken);
-
-          if (originalRequest.headers) {
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          }
-
-          this.processQueue(null, newAccessToken);
-          return this.axiosInstance(originalRequest);
-        } catch (err) {
-          this.processQueue(err as AxiosError, null);
-          this.clearAuthTokens();
-          window.location.href = "/login";
-          return Promise.reject(err);
-        } finally {
-          this.isRefreshing = false;
-        }
-      }
-    );
   }
 
   public setAuthTokens(accessToken: string, refreshToken: string): void {

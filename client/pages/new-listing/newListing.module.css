@@ -1,0 +1,108 @@
+.container {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  /* height: 80%; */
+}
+
+.form {
+  background-color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  /* padding: 16px; */
+  gap: 10px;
+
+  width: 50rem;
+}
+
+.formGroup {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.formGroup label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.input {
+  border: 1px solid #dcdcdd;
+  outline: none;
+  transition: all 0.2s ease-out;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #fff;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.6rem;
+}
+
+.input:hover,
+.input:active {
+  border: 1px solid #4e59cf;
+}
+
+.submitButton {
+  outline: none;
+  border: none;
+  background-color: #4e59cf;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px;
+  font-size: 12px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.submitButton:hover {
+  background-color: #646dd5;
+}
+
+.submitButton:active {
+  background-color: #646dd5;
+}
+
+.error {
+  font-size: 10px;
+  color: #ff3333;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 50rem;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.carImage {
+  height: 15rem;
+  max-width: 15rem;
+  border-radius: 8px;
+  width: auto;
+  object-fit: cover;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+}
+
+.carImage:hover {
+  filter: brightness(70%);
+  opacity: 0.9;
+}

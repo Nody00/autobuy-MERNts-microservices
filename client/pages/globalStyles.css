@@ -17,6 +17,11 @@
     "Segoe UI", Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
     sans-serif;
 }
+
+html {
+  font-size: 62.5%; /* 10px = 62.5% of 16px (default font size) */
+}
+
 body {
   /* 3. Add accessible line-height */
   line-height: 1.5;
@@ -67,4 +72,30 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
+}
+
+/* Scrollbar styles for WebKit browsers (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color on hover for better visual feedback */
+}
+
+/* Scrollbar styles for Firefox */
+* {
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: #888 #f1f1f1; /* Thumb and track colors */
 }
