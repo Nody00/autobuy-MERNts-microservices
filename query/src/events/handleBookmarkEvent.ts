@@ -48,14 +48,17 @@ export const handleBookMarkEvent = async ({
     }
 
     let listingUserIdSaveExists = false;
-    listing.saves.forEach((el) => {
+    listing.savedBy.forEach((el) => {
       if (el.toString() === userId) {
         listingUserIdSaveExists = true;
       }
     });
 
     if (!listingUserIdSaveExists) {
-      const newSaves = [...listing.saves, new mongoose.Types.ObjectId(userId)];
+      const newSaves = [
+        ...listing.savedBy,
+        new mongoose.Types.ObjectId(userId),
+      ];
 
       await Listing.updateOne(
         { _id: listing._id },
@@ -84,8 +87,8 @@ export const handleBookMarkEvent = async ({
     }
 
     const newSaves = user.saves.filter((el) => el.toString() !== listingId);
-    const newListingSaves = listing.saves.filter(
-      (el) => el.toString() !== userId
+    const newListingSaves = listing.savedBy.filter(
+      (el) => el?._id?.toString() !== userId
     );
 
     await User.updateOne(

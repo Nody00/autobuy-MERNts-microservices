@@ -37,7 +37,7 @@ export const getOneListingController = async (
       ...listing.toJSON(),
       isNegotiable: listing.negotiable,
       viewCount: listing.views + 1, // Include the just-incremented view
-      savesCount: listing.saves?.length || 0,
+      savesCount: listing.savedBy?.length || 0,
       // Add any computed fields here
       ageInYears: new Date().getFullYear() - listing.yearOfProduction,
       registrationAge:

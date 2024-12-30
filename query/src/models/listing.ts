@@ -41,7 +41,7 @@ const listingSchema = new Schema({
     type: Number, // Number of views on the listing
     default: 0,
   },
-  saves: {
+  savedBy: {
     type: [Types.ObjectId], // Users who saved/bookmarked the listing
   },
   isFeatured: {
@@ -66,6 +66,25 @@ const listingSchema = new Schema({
     default: 1,
     required: true,
   },
+  endBiddingAt: {
+    type: Date,
+    required: true,
+  },
+  highestBid: {
+    type: Types.ObjectId,
+  },
+  images: [
+    {
+      url: {
+        type: String,
+        required: true,
+      },
+      publicId: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 // Indexes for frequently queried fields
