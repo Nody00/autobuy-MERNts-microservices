@@ -1,4 +1,4 @@
-interface images {
+interface Image {
   url: string;
   publicId: string;
   _id: string;
@@ -19,5 +19,5 @@ export interface ListingType {
   savedBy: [];
   tags: [];
   version: number;
-  images: images[];
+  images: Image[];
 }

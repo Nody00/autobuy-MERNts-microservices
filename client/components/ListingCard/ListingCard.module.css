@@ -1,5 +1,69 @@
 .card {
-  height: 200px;
   border-radius: 12px;
-  background-color: red;
+  background-color: #fff;
+  border: 1px solid #f4f4f5;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 1.2rem;
+  transition: all 0.3s ease-out;
+}
+
+.card:hover {
+  border: 1px solid #222fc3;
+}
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  height: 20rem;
+}
+
+.imageBox image {
+  max-width: 20rem;
+  max-height: 20rem;
+}
+
+.absoluteButton {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonLeft {
+  top: 30%;
+  left: 10px;
+}
+
+.buttonRight {
+  top: 30%;
+  right: 10px;
+}
+
+.infoBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  row-gap: 4px;
+}
+
+.infoTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.infoData {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #000;
 }

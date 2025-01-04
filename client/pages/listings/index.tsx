@@ -15,7 +15,7 @@ export default function Listings() {
   });
 
   if (isLoading) return <p>is loading...</p>;
-
+  console.log("dinov log data", data.data);
   return (
     <Layout>
       <div className={styles.container}>
