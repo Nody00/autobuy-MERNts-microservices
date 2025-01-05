@@ -1,8 +1,14 @@
 import { ListingType } from "@/types/listingType";
 import styles from "./ListingCard.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { LeftChevron } from "@/icons/LeftChevron";
 import { RightChevron } from "@/icons/RightChevron";
+import { OpenDetailsIcon } from "@/icons/OpenDetailsIcon";
+import { HeartIcon } from "@/icons/HeartIcon";
+import { DeleteIcon } from "@/icons/DeleteIcon";
+import { useRouter } from "next/navigation";
+import { RedHeartIcon } from "@/icons/RedHeartIcon";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function ListingCard({
   listingData,
@@ -10,10 +16,17 @@ export default function ListingCard({
   listingData: ListingType;
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const user = useAuthStore((state) => state.user);
   const [showButtons, setShowButtons] = useState(false);
   const images = listingData.images || [];
   const totalImages = images.length;
+  const router = useRouter();
+  const isListingSaved = useMemo(() => {
+    if (listingData.savedBy.find((el) => el === user?._id)) return true;
+    return false;
+  }, [listingData, user]);
   console.log("dinov log listingData", listingData);
+  console.log("dinov log isListingSaved", isListingSaved);
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
@@ -30,10 +43,18 @@ export default function ListingCard({
   };
 
   const handleHideButtons = () => {
-    // setTimeout(() => {
     setShowButtons(false);
-    // }, 1000);
   };
+
+  const handleOpenDetails = () => {
+    router.push(`/listings/${listingData._id}`);
+  };
+
+  const handleLikeListing = () => {
+    // send request to mark listing, figure out how to refresh listing data with tanstack query
+  };
+
+  const handleDeleteListing = () => {};
 
   return (
     <div className={styles.card}>
@@ -87,7 +108,24 @@ export default function ListingCard({
         <p className={styles.infoData}>{listingData.views}</p>
       </div>
       {/*  */}
-      <div className={styles.controlBox}></div>
+      <div className={styles.controlBox}>
+        <div className={styles.iconButton} onClick={handleOpenDetails}>
+          <OpenDetailsIcon size="24px" />
+        </div>
+        {!isListingSaved && (
+          <div className={styles.iconButton}>
+            <HeartIcon size="24px" />
+          </div>
+        )}
+        {isListingSaved && (
+          <div className={styles.iconButton}>
+            <RedHeartIcon size="24px" />
+          </div>
+        )}
+        <div className={styles.iconButton}>
+          <DeleteIcon size="24px" />
+        </div>
+      </div>
       {/*  */}
     </div>
   );

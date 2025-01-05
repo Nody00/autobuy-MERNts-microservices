@@ -46,7 +46,7 @@ export const handleBookMarkEvent = async ({
     if (!listing) {
       throw new Error("No listing found");
     }
-
+    console.log("dinov log listing", listing);
     let listingUserIdSaveExists = false;
     listing.savedBy.forEach((el) => {
       if (el.toString() === userId) {
@@ -63,7 +63,7 @@ export const handleBookMarkEvent = async ({
       await Listing.updateOne(
         { _id: listing._id },
         {
-          $set: { saves: newSaves },
+          $set: { savedBy: newSaves },
           $inc: { version: 1 },
         }
       );

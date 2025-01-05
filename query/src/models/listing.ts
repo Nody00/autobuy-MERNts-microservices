@@ -42,7 +42,8 @@ const listingSchema = new Schema({
     default: 0,
   },
   savedBy: {
-    type: [Types.ObjectId], // Users who saved/bookmarked the listing
+    type: [Schema.Types.ObjectId], // Users who saved/bookmarked the listing
+    ref: "User",
   },
   isFeatured: {
     type: Boolean, // Whether the listing is featured

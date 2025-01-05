@@ -6,7 +6,7 @@ deploy:
       - ./infra/k8s/*
 build:
   local:
-    push: true
+    push: false
   artifacts:
     - image: nody00/autobuy-auth
       context: auth

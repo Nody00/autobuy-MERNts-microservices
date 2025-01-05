@@ -96,6 +96,4 @@ export const saveListingController = async (
     console.error(error);
     res.status(500).send({ message: "Server error!" });
   }
-
-  // send out the appropriate rabbitmq messages,one for updating the listing,one for updating the user
 };

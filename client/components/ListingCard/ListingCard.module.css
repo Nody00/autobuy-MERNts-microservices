@@ -5,6 +5,11 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding: 1.2rem;
   transition: all 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .card:hover {
@@ -66,4 +71,31 @@
   font-size: 1.4rem;
   font-weight: 400;
   color: #000;
+}
+
+.controlBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.iconButton {
+  height: 48px;
+  width: 48px;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconButton:hover {
+  background-color: #f4f4f5;
+}
+
+.iconButton:active {
+  background-color: #f4f4f5;
 }
