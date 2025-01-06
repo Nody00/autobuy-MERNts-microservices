@@ -47,11 +47,9 @@ export const saveListingController = async (
   try {
     if (isListingAlreadySaved) {
       const newListing = {
-        savedBy: foundListing.savedBy.filter(
-          (el) => el.toString() !== id.toString()
-        ),
+        savedBy: foundListing.savedBy.filter((el) => el.toString() !== id),
       };
-
+      console.log("dinov log newListing", newListing);
       await Listing.updateOne(
         { _id: listingId },
         {
@@ -60,7 +58,7 @@ export const saveListingController = async (
         }
       );
 
-      rabbit.sendMessage("listing-events", "bookmark.listings.remove", {
+      await rabbit.sendMessage("listing-events", "bookmark.listings.remove", {
         listingId,
         userId: id,
         operation: "remove",
@@ -85,7 +83,7 @@ export const saveListingController = async (
         }
       );
 
-      rabbit.sendMessage("listing-events", "bookmark.listings.add", {
+      await rabbit.sendMessage("listing-events", "bookmark.listings.add", {
         listingId,
         userId: id,
         operation: "add",

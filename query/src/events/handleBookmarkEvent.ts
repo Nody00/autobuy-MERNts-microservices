@@ -102,7 +102,7 @@ export const handleBookMarkEvent = async ({
     await Listing.updateOne(
       { _id: listingId },
       {
-        $set: { saves: newListingSaves },
+        $set: { savedBy: newListingSaves },
         $inc: { version: 1 },
       }
     );

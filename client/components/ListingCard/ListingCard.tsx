@@ -9,11 +9,14 @@ import { DeleteIcon } from "@/icons/DeleteIcon";
 import { useRouter } from "next/navigation";
 import { RedHeartIcon } from "@/icons/RedHeartIcon";
 import { useAuthStore } from "@/stores/authStore";
+import { listingAPI } from "@/api/listings";
 
 export default function ListingCard({
   listingData,
+  refetch,
 }: {
   listingData: ListingType;
+  refetch: () => {};
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const user = useAuthStore((state) => state.user);
@@ -21,12 +24,11 @@ export default function ListingCard({
   const images = listingData.images || [];
   const totalImages = images.length;
   const router = useRouter();
+
   const isListingSaved = useMemo(() => {
     if (listingData.savedBy.find((el) => el === user?._id)) return true;
     return false;
   }, [listingData, user]);
-  console.log("dinov log listingData", listingData);
-  console.log("dinov log isListingSaved", isListingSaved);
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
@@ -50,11 +52,27 @@ export default function ListingCard({
     router.push(`/listings/${listingData._id}`);
   };
 
-  const handleLikeListing = () => {
-    // send request to mark listing, figure out how to refresh listing data with tanstack query
+  const handleLikeListing = async () => {
+    try {
+      // send request to mark listing, figure out how to refresh listing data with tanstack query
+      await listingAPI.save(listingData._id);
+
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDeleteListing = () => {};
+  const handleDeleteListing = async () => {
+    try {
+      // send request to mark listing, figure out how to refresh listing data with tanstack query
+      await listingAPI.delete(listingData._id);
+
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className={styles.card}>
@@ -113,16 +131,16 @@ export default function ListingCard({
           <OpenDetailsIcon size="24px" />
         </div>
         {!isListingSaved && (
-          <div className={styles.iconButton}>
+          <div className={styles.iconButton} onClick={handleLikeListing}>
             <HeartIcon size="24px" />
           </div>
         )}
         {isListingSaved && (
-          <div className={styles.iconButton}>
+          <div className={styles.iconButton} onClick={handleLikeListing}>
             <RedHeartIcon size="24px" />
           </div>
         )}
-        <div className={styles.iconButton}>
+        <div className={styles.iconButton} onClick={handleDeleteListing}>
           <DeleteIcon size="24px" />
         </div>
       </div>

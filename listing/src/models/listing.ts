@@ -41,7 +41,7 @@ const listingSchema = new Schema({
     type: Number, // Number of views on the listing
   },
   savedBy: {
-    type: [Types.ObjectId], // Users who saved/bookmarked the listing
+    type: [Schema.Types.ObjectId], // Users who saved/bookmarked the listing
   },
   isFeatured: {
     type: Boolean, // Whether the listing is featured
@@ -59,6 +59,7 @@ const listingSchema = new Schema({
   },
   deleted: {
     type: Boolean,
+    default: false,
   },
   version: {
     type: Number,

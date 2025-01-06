@@ -61,6 +61,7 @@ const listingSchema = new Schema({
   },
   deleted: {
     type: Boolean,
+    default: false,
   },
   version: {
     type: Number,
